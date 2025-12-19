@@ -1,0 +1,26 @@
+{% extends base_template %}
+{% block content %}
+{% load static %}
+<div class="container mt-4">
+<h3>Simulateur de paiement — Demande #{{ qr.id }}</h3>
+
+
+<div class="card mb-3">
+<div class="card-body">
+<p>Utilisateur : <strong>{{ qr.user.get_full_name|default:qr.user.username }}</strong></p>
+<p>Montant : <strong>{{ qr.price }}</strong></p>
+<p>Référence locale : <strong>{{ qr.id }}</strong></p>
+</div>
+</div>
+
+
+<form method="post" action="">
+{% csrf_token %}
+<p class="text-muted">Cliquez sur le bouton pour simuler un paiement réussi. Cela appellera notre webhook interne.</p>
+<button type="submit" class="btn btn-success">Simuler paiement réussi</button>
+<a href="{% url 'stockage_page' %}" class="btn btn-secondary ms-2">Retour</a>
+</form>
+
+
+</div>
+{% endblock content%}

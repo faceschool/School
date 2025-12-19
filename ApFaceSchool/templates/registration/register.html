@@ -1,0 +1,130 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+{% load form_tags %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <!-- Messages Django -->
+        <div class="col-lg-8">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow">
+                <div class="card-body bg-info text-white">
+                    <h5 class="card-title text-center mb-4">
+                        <img src="{% static 'images/Logo/inscription.png' %}" class="img-fluid" alt="FaceSchool"/>
+                    </h5>
+
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Erreurs globales -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}<br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Champs du formulaire avec tooltips -->
+                        {% for field in form %}
+                            <div class="mb-3 position-relative">
+                                {{ field.label_tag }}
+
+                                {% if field.name == "password" or field.name == "password2" %}
+                                    <div class="input-group">
+                                        {% if field.errors %}
+                                            {{ field|add_class:"form-control is-invalid" }}
+                                        {% else %}
+                                            {{ field|add_class:"form-control" }}
+                                        {% endif %}
+                                        <span class="input-group-text bg-white">
+                                            <i class="bi bi-eye-slash toggle-password" style="cursor:pointer;"></i>
+                                        </span>
+                                        <div class="invalid-feedback">
+                                            {% for error in field.errors %}
+                                                {{ error }}<br>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% if field.errors %}
+                                        {{ field|add_class:"form-control is-invalid" }}
+                                        <div class="invalid-feedback">
+                                            {% for error in field.errors %}
+                                                {{ error }}<br>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ field|add_class:"form-control" }}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if field.help_text %}
+                                    <span
+                                        class="position-absolute top-0 end-0"
+                                        data-bs-toggle="tooltip"
+                                        title="{{ field.help_text }}">
+                                        <i class="bi bi-info-circle text-light"></i>
+                                    </span>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">S'inscrire</button>
+                        </div>
+                    </form>
+
+                    <hr class="border-light">
+
+                    <div class="text-center">
+                        <small>
+                            Déjà inscrit(e) ?
+                            <a class="text-dark fw-bold" href="{% url 'login' %}">Se connecter</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts Bootstrap & Password Toggle -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialiser tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Toggle mot de passe
+    const toggleIcons = document.querySelectorAll('.toggle-password');
+    toggleIcons.forEach(icon => {
+        icon.addEventListener('click', function() {
+            const input = this.closest('.input-group').querySelector('input');
+            if (input.type === "password") {
+                input.type = "text";
+                this.classList.remove('bi-eye-slash');
+                this.classList.add('bi-eye');
+            } else {
+                input.type = "password";
+                this.classList.remove('bi-eye');
+                this.classList.add('bi-eye-slash');
+            }
+        });
+    });
+});
+</script>
+
+
+{% endblock %}

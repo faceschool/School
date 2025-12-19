@@ -1,0 +1,207 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+/* --- Ombres et hover pour le formulaire et cartes --- */
+.card-edit, .card-form {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-edit:hover, .card-form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* --- Glow sur champ actif --- */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border: 2px solid #0d6efd;
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.5);
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+}
+
+/* --- Shake pour champ en erreur --- */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+.field-error {
+  animation: shake 0.4s ease;
+  border: 2px solid #dc3545 !important;
+  background-color: #ffe5e5;
+}
+
+/* --- Tableau hover --- */
+.table tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+/* --- Boutons centrés --- */
+.btn-center {
+  display: block;
+  width: 60%;
+  margin: 10px auto;
+}
+    /* --- Notification animée --- */
+.alert-success-animate {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.5s ease;
+}
+.alert-success-animate.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+
+<div class="container-fluid">
+
+  <div class="row m-3">
+    <div class="col-12">
+      <p>
+        Un <b>Formateur</b> peut ajouter des <b>Apprenants</b> <i>(Elèves, Étudiants, etc.)</i> à sa <b>Classe</b>.<br>
+        Pour que cette affectation soit possible, l'Apprenant devra être déjà inscrit sur <b>FaceSchool</b>.
+      </p>
+      <hr>
+    </div>
+  </div>
+
+  <div class="row m-3">
+
+    <!-- Formulaire d'ajout d'apprenant -->
+    <div class="col-md-3 shadow card-form p-3">
+      <img class="img-fluid shadow rounded mb-3" width="100%" src="{% static 'images/Page/classe2.png' %}"  />
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+         <!-- Notification -->
+  {% if messages %}
+    <div class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1050; min-width: 300px;">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-success-animate" id="flash-message">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+      <form method="post" action="{% url 'InscrireApprClasses' MClasses.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="IDClasse" value="{{ MClasses.id }}" hidden>
+
+        <label for="Matricule"><b>Ajouter un Apprenant :</b></label>
+        <input type="text" name="Matricule" class="form-control {% if form.Matricule.errors %}field-error{% endif %}" placeholder="Saisir un Matricule" required>
+        {% if form.Matricule.errors %}
+          <small class="text-danger">{{ form.Matricule.errors }}</small>
+        {% endif %}
+        <hr>
+        <button type="submit" class="btn btn-success btn-center">Ajouter</button>
+      </form>
+    </div>
+
+    <!-- Tableau de la classe et liste des apprenants -->
+    <div class="col-md-9">
+
+      <!-- Info Classe -->
+      <div class="mb-3">
+        <button class="btn btn-info btn-center"><b>CLASSE</b></button>
+        <hr>
+        <table class="table table-striped table-bordered">
+          <thead class="table-success">
+            <tr>
+              <th>#</th>
+              <th>Classe</th>
+              <th>Niveau</th>
+              <th>Effectif</th>
+              <th>Chef Classe</th>
+              <th>Code Invitation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-primary">
+              <td>{{ MClasses.id }}</td>
+              <td>{{ MClasses.NomClasse }}</td>
+              <td>{{ MClasses.Niveau }}</td>
+              <td>{{ MClasses.Effectif }}</td>
+              <td>{{ MClasses.ChefClasse }}</td>
+              <td>{{ MClasses.CodeAffect }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Liste des apprenants -->
+      <div class="mb-3">
+        <button class="btn btn-info btn-center"><b>LISTE ÉLÈVES DE LA CLASSE</b></button>
+        <hr>
+        {% if ApprenClasse %}
+          <table class="table table-striped table-bordered">
+            <thead class="table-info">
+              <tr>
+                <th>#</th>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Opération</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for Appren in ApprenClasse %}
+              <tr>
+                <td>{{ Appren.id }}</td>
+                <td>{{ Appren.apprenant.Matricule }}</td>
+                <td>{{ Appren.apprenant.Nom }}</td>
+                <td>{{ Appren.apprenant.Prenom }}</td>
+                <td>{{ Appren.apprenant.Tel }}</td>
+                <td>{{ Appren.apprenant.Email }}</td>
+                <td>
+                  <a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="{% url 'SupAppClasses' Appren.id %}">
+                    <img width="18%" src="{% static 'images/Logo/corbeille.png' %}" alt="Supprimer"/>
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="7" class="text-center">Aucun Apprenant inscrit.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <center><b>Total :</b> [ {{ total_apprenants }} ]</center>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<script>
+// Ajouter la classe 'show' pour déclencher l'animation
+window.addEventListener('DOMContentLoaded', (event) => {
+    const flash = document.getElementById('flash-message');
+    if(flash){
+        setTimeout(() => {
+            flash.classList.add('show');
+        }, 100);
+
+        // Disparition automatique après 3 secondes
+        setTimeout(() => {
+            flash.classList.remove('show');
+        }, 6200);
+    }
+});
+</script>
+
+{% endblock content %}

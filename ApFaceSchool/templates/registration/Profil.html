@@ -1,0 +1,64 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<div class="container my-5">
+    <div class="row justify-content-center mb-4">
+        <h4 class="text-center"><u>Renseignez Votre Profil pour Finaliser votre inscription</u></h4>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Formateur Card -->
+        <div class="col-12 col-md-4 mb-4">
+            <div class="card shadow h-100 hover-card" onclick="window.location.href='{% url 'Profilformateurs' %}'">
+                <img src="{% static 'images/logo/formateur.png' %}" class="img-fluid card-img-top" alt="Formateur"/>
+                <div class="card-body">
+                    <p class="card-text">
+                        Un <b>formateur</b> détient des connaissances à transmettre aux <b>apprenants</b>.
+                        <br>Le <b>formateur</b> peut être :
+                        <ul>
+                            <li>de collège</li>
+                            <li>de lycée</li>
+                            <li>d’université</li>
+                            <li>d'un métier</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="card-footer text-center bg-white">
+                    <a class="btn btn-success" href="{% url 'Profilformateurs' %}" role="button">Formateur</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Apprenant Card -->
+        <div class="col-12 col-md-4 mb-4">
+            <div class="card shadow h-100 hover-card" onclick="window.location.href='{% url 'Profilapprenant' %}'">
+                <img src="{% static 'images/logo/etudiant.png' %}" class="img-fluid card-img-top" alt="Apprenant"/>
+                <div class="card-body">
+                    <p class="card-text">
+                        Un <b>Apprenant</b> peut être un étudiant ou un élève, cherchant à améliorer son niveau de connaissance.
+                    </p>
+                </div>
+                <div class="card-footer text-center bg-white">
+                    <a class="btn btn-success" href="{% url 'Profilapprenant' %}" role="button">Apprenant</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-card:hover {
+    transform: translateY(-5px);
+    transition: 0.3s;
+    cursor: pointer;
+}
+</style>
+
+
+{% endblock content %}

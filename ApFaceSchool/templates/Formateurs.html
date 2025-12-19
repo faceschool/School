@@ -1,0 +1,16 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+<h4>Formateurs</h4>
+ <form method="post" enctype="multipart/form-data" action="">
+     {% csrf_token %}
+     {{ formateur.as_p }}
+
+     {% if forma.Photo %}
+         <p>Photo actuelle :</p>
+         <img src="{{ forma.Photo.url }}" alt="Photo" width="150">
+     {% endif %}
+
+     <button type="submit" class="btn btn-primary">Enregistrer</button>
+ </form>
+{% endblock content %}

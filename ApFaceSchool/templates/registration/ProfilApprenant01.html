@@ -1,0 +1,63 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+ <div class="container">
+            <div class="row justify-content-center mt-3">
+
+                <div class="col-12 col-md-8 m-5">
+                <div class="row">
+                        <div class="col-12 col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                            <div class="card text-bg-white mb-3 shadow">
+                                <div class="card-header fond"><center><b>COMPLETER VOTRE PROFIL</b></center></div>
+                                <div class="card-body fonds">
+                                    <p class="card-text">
+                                          L'inscription des Apprenants se fait en une seule fois,tout Apprenant qui s'inscrit et qui demeure sans activité pendant
+                                        3 mois sera supprimé automatiquement. Après votre inscription, le changement de niveau par Upgrade.
+                                         <center>
+                                            {% if user.is_authenticated %}
+                                             <button class="btn btn-danger "><a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="">Supprimer un compte erroné</a> </button>
+                                           {% endif %}
+                                        </center>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card text-bg-white mb-3 shadow">
+
+                        <div class="card-body">
+                            <div class="card-header mb-5"><center><b></b>
+                                MODIFICATION DE VOTRE PROFIL
+                            </div>
+
+                             <form class="row g-3 needs-validation"  method="post" enctype="multipart/form-data" action="{% url 'update_ProfilApprenant' request.user.id %}">
+
+                                     {% csrf_token %}
+                                {% for field in Apprenant %}
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                       <b><label for="validationServer01" class="form-label">{{ field.label }}</label></b>
+                                        <!--input type="text" class="form-control is-valid" id="validationServer01" value="{{ field }}" required-->
+                                        {{ field }}
+                                    </div>
+                                    
+                                 {% endfor %}
+                                {% if Appren.Photo %}
+                                    <p><br>
+                                        <img src="{{ Appren.Photo.url }}" alt="Photo" width="150">
+                                    </p>
+                                {% endif %}
+
+                                  <button type="submit" class="btn btn-primary w-100 mt-3">Enregistrer</button>
+
+                                </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+{% endblock content %}

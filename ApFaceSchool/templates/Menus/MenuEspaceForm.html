@@ -1,0 +1,53 @@
+{% extends "Menus/Menu.html" %}
+{% load static %}
+ {% load custom_filters %}
+{% block nav %}
+  <nav class="navbar navbar-expand-lg navbar-light bg-primary shadow">
+    <div class="container shadow">
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+    </div>
+</nav>
+
+ {% if user.is_authenticated %}
+ <center>Votre Code Autorisation d'inscription : <b style="color:green">{{ code }}</b> </center>
+{% endif %}
+
+<ul class="nav nav-tabs" style="background-color: black;">
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="hover-word nav-link text-white" href="{% url 'MesClasses' %}">Mes Classes</a>
+            </li>
+            <li class="nav-item">
+                <a class="hover-word nav-link text-white" href="{% url 'Ajouter_dossiers' request.user.id %}">Mes Dossiers</a>
+            </li>
+            <li class="nav-item ">
+                <a class="hover-word nav-link text-white"  href="{% url 'ListepartClasses'%}">Classes Partenaires</a>
+            </li>
+            <li class="nav-item">
+                <a class="hover-word nav-link text-white" href="{% url 'TransferpartClasses'%}">Transfert Classe vers Classe</a>
+            </li>
+            <li class="nav-item">
+                <a class="hover-word hover-word nav-link text-white" href="{% url 'GroupeTrav'%}">Groupe de Travail</a>
+            </li>
+             <li class="nav-item">
+                <a class="hover-word nav-link text-white" href="{% url 'MesMessages' %}">Mes Messages</a>
+            </li>
+            {% endif %}
+             <li class="nav-item">
+                <a class="hover-word nav-link text-white" href="{% url 'liste_reunions' %}">Meeting</a>
+            </li>
+            <li class="nav-item">
+                <a class="hover-word nav-link text-white" href="{% url 'forum' %}">Forum</a>
+            </li>
+</ul>
+<br>
+{% endblock %}
+{% block content %}
+
+{% endblock %}
+

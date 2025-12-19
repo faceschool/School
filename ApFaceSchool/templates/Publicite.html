@@ -1,0 +1,44 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+.pub-container {
+    position: relative;
+    height: 200px; /* ou selon la taille de l'image */
+}
+
+.pub {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+</style>
+
+
+<div id="pub-container" class="pub-container">
+    {% for pub in pubs %}
+        <div class="pub" style="{% if not forloop.first %}display:none;{% endif %}">
+            <a href="{{ cours.lien }}" target="_blank">
+                <img src="{{ cours.image.url }}" alt="{{ cours.titre }}" width="300" />
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+let pubs = document.querySelectorAll('#pub-container .pub');
+let index = 0;
+
+setInterval(() => {
+    pubs[index].style.display = 'none';
+    index = (index + 1) % pubs.length;
+     pubs[index].style.display = 'block';
+}, 5000); // changement toutes les 10 secondes
+</script>
+
+
+{% endblock content %}

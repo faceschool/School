@@ -1,0 +1,92 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+<h4 class="titre-principal m-3">Créer Code d'Activation</h4>
+<div class="row">
+    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+       <img width="100%" src="{% static 'images/Page/ets.png' %}"  alt="Cours à Domicile 1">
+     </div>
+
+     <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 shadow" >
+             {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+           <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <label for="Matricule" class="form-label">Matricule</label>
+                <input type="text" class="form-control" id="Matricule" name="Matricule" maxlength="15"  placeholder="Votre Matricule"  required>
+            </div>
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <label for="CodeActivation" class="form-label">Code Activation</label>
+                <input type="text" class="form-control @error('CodeActivation') is-invalid @enderror" id="CodeActivation" name="CodeActivation" maxlength="10"    readonly >
+            </div>
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <label for="Delais" class="form-label">Delais</label>
+                <input type="text" class="form-control @error('Delais') is-invalid @enderror" id="Delais" name="Delais" maxlength="10"   value="365" >
+            </div>
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <label for="Etat" class="form-label">Etat</label>
+                <input type="checkbox" class="form-CheckboxInput @error('Etat') is-invalid @enderror" id="Etat" name="Etat" maxlength="1"   value=0 >
+            </div>
+               <hr>
+                <center><button class="btn btn-success m-2" type="submit">Valider</button></center>
+           </form>
+    </div>
+    <div class="col-12">
+              {% if active %}
+                 <br>
+                <hr>
+                <h5 class="text-center text-primary mb-4"><b>LISTE DES CODES ACTIVATION</b></h5>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-success text-center">
+                      <tr>
+                        <th>Code</th>
+                        <th>Matricule</th>
+                        <th>Nom Prénom</th>
+                        <th>CodeActivation</th>
+                        <th>Delais</th>
+                        <th>Etat</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for etab in active %}
+                        <tr>
+                          <td class="text-center">{{ etab.id }}</td>
+                          <td>{{ etab.Matricule_id }}</td>
+                           <td>{{ etab.Matricule.Nom }} {{ etab.Matricule.Prenom  }}</td>
+                          <td>{{ etab.CodeActivation }}</td>
+                          <td>{{ etab.Delais }}</td>
+                         <td class="text-center">
+                            {% if etab.Etat  %}
+                              ✅
+                            {% else %}
+                              ❌
+                            {% endif %}
+                          </td>
+                          <td class="text-center">
+                            <a href="{% url 'ModifierActivation' etab.id %}">Modifier</a>
+                          </td>
+                          <td class="text-center">
+                            <a href="{% url 'SupprimerActivation' etab.id %}">
+                              <img width="25" src="{% static 'images/Logo/corbeille.png' %}" alt="Supprimer">
+                            </a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              {% endif %}
+            </div>
+</div>
+
+
+{% endblock %}

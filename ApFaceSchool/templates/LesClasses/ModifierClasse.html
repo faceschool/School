@@ -1,0 +1,110 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+/* --- Ombres et hover pour le formulaire --- */
+.card-edit {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-edit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* --- Boutons centrés --- */
+.btn-center {
+  display: block;
+  width: 60%;
+  margin: 0 auto 15px auto;
+}
+
+/* --- Glow sur champ actif --- */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border: 2px solid #0d6efd; /* bleu bootstrap */
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.5);
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+}
+
+/* --- Shake pour champ en erreur --- */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+.field-error {
+  animation: shake 0.4s ease;
+  border: 2px solid #dc3545 !important; /* rouge */
+  background-color: #ffe5e5;
+}
+
+/* --- Message d'erreur --- */
+.text-danger {
+  font-size: 0.8rem;
+}
+</style>
+
+<div class="container">
+  <div class="row justify-content-center m-5">
+
+    <!-- Partie info classe -->
+    <div class="col-md-4 mb-4">
+      <img class="img-fluid shadow rounded" width="100%" src="{% static 'images/Page/classe2.png' %}"  />
+      <hr>
+      <p>
+        Chaque <b>Formateur</b> peut créer autant de <b>Classe</b> qu'il souhaite.<br>
+        Une <b>Classe</b> peut être chaque classe que le <b>Formateur</b> enseigne ou le regroupement par <b>Niveau</b> de toutes ses classes.<br>
+        Le <b>Code d'invitation</b> est un code défini par le <b>Formateur</b> lui-même qui servira à inviter les Apprenants (Étudiants, élèves, etc.) dans sa classe.
+      </p>
+    </div>
+
+    <!-- Partie formulaire modification -->
+    <div class="col-md-6 mb-4">
+      <div class="card-edit p-3">
+
+        <div class="m-3">
+          <button class="btn btn-info btn-center"><b>MODIFIER UNE CLASSE</b></button>
+        </div>
+        <hr>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'UpdateClasses' Mclas.id %}" enctype="multipart/form-data" class="mt-3">
+          {% csrf_token %}
+          <div class="row">
+            {% for field in Mclasse %}
+              <div class="col-md-6 mb-3">
+                <label class="form-label"><b>{{ field.label }}</b></label>
+                {% if field.errors %}
+
+                  <small class="text-danger">{{ field.errors }}</small>
+                {% else %}
+                  {{ field }}
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          <hr>
+          <button type="submit" class="btn btn-success btn-center">Enregistrer</button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock content %}

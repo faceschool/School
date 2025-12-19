@@ -1,0 +1,488 @@
+{% extends base_template %}
+{% block content %}
+{% load static %}
+
+
+<style>
+    /* Effet hover sur les cards */
+    .card-custom {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    }
+
+    /* Progress bar arrondie */
+    .progress {
+        border-radius: 30px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+
+
+<style>
+    /* Dark Mode */
+    body.dark-mode {
+        background-color: #121212 !important;
+        color: #e6e6e6 !important;
+    }
+    body.dark-mode .card {
+        background-color: #1f1f1f !important;
+        color: white;
+        border: 1px solid #333 !important;
+    }
+    body.dark-mode table {
+        color: white;
+    }
+
+    /* Cards animation */
+    .card-custom {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeIn 0.8s ease;
+    }
+    .card-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 18px rgba(0,0,0,0.20);
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Progress bar */
+    .progress {
+        border-radius: 25px;
+        overflow: hidden;
+    }
+
+    .alert-storage {
+        animation: pulse 1.3s infinite alternate;
+    }
+
+    @keyframes pulse {
+        from { transform: scale(1); }
+        to { transform: scale(1.03); }
+    }
+</style>
+
+<script>
+    /* Dark mode toggle and save preference */
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        if (localStorage.getItem("darkMode") === "true") {
+            document.body.classList.add("dark-mode");
+        }
+    });
+</script>
+
+
+
+
+<!--<script>-->
+<!--    /* Dark mode toggle */-->
+<!--    function toggleDarkMode() {-->
+<!--        document.body.classList.toggle("dark-mode");-->
+<!--        localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));-->
+<!--    }-->
+
+<!--    /* Load saved preference */-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        if (localStorage.getItem("darkMode") === "true") {-->
+<!--            document.body.classList.add("dark-mode");-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+
+<div class="container-fluid py-3">
+
+<!-- Toggle Dark Mode -->
+<div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-dark btn-sm" onclick="toggleDarkMode()">
+        <i class="bi bi-moon-stars"></i> Mode sombre
+    </button>
+</div>
+
+
+<!-- Alerte stockage -->
+{% if pourcentage >= 90 %}
+    <div class="alert alert-danger text-center fw-bold alert-storage">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Attention ! Vous avez utilisé {{ pourcentage }}% de votre espace.
+        Pensez à augmenter votre capacité !
+    </div>
+{% elif pourcentage >= 70 %}
+    <div class="alert alert-warning text-center fw-bold alert-storage">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        Vous avez utilisé {{ pourcentage }}% de votre espace.
+    </div>
+{% endif %}
+
+
+<div class="row g-4">
+
+    <!-- À propos -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card card-custom shadow-sm border-0 p-3">
+            <h5 class="text-primary">
+                <i class="bi bi-info-circle-fill"></i> À propos du stockage
+            </h5>
+            <p>
+                Cette page vous permet de gérer vos documents importants.
+                Vous pouvez les transférer à vos classes selon leur niveau.
+                <br><br>
+                La capacité de stockage est limitée. Consultez votre espace utilisé et restant.
+            </p>
+        </div>
+    </div>
+
+    <!-- Espace de stockage -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card card-custom shadow-sm border-0 p-3">
+            <h5 class="text-success fw-bold">
+                <i class="bi bi-hdd-fill"></i> Espace de stockage
+            </h5>
+            <hr>
+
+            <table class="table table-bordered table-sm">
+                <tbody>
+                    <tr>
+                        <td><b>Quota</b></td>
+                        <td>{{ Mo_Quota|floatformat:2 }} Mo</td>
+                    </tr>
+                    <tr>
+                        <td><b>Utilisé</b></td>
+                        <td>{{ Mo_taille_utilisee|floatformat:2 }} Mo</td>
+                    </tr>
+                    <tr>
+                        <td><b>Restant</b></td>
+                        <td>{{ Mo_restant|floatformat:2 }} Mo</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <!-- Tarifs -->
+    <div class="col-lg-4 col-md-12">
+        <div class="card card-custom shadow-sm border-0 p-3">
+            <h5 class="text-danger fw-bold">
+                <i class="bi bi-cash-stack"></i> Tarifs de stockage
+            </h5>
+            <hr>
+
+            <table class="table table-striped table-bordered table-sm">
+                <thead class="table-success">
+                    <tr>
+                        <th>Capacité</th>
+                        <th>Tarif</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1 Go</td>
+                        <td>1 000 FCFA</td>
+                        <td>070000000<br>contact@example.com</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Bouton pour ouvrir la modal -->
+            <button class="btn btn-outline-primary w-100 mt-2"
+                    data-bs-toggle="modal" data-bs-target="#ModalQuota">
+                <i class="bi bi-plus-circle"></i> Augmenter ma capacité
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="col-12">
+        <div class="card shadow-sm border-0 p-3 mt-3">
+            <h6 class="fw-bold">Utilisation du stockage</h6>
+
+            <div class="progress mt-2" style="height: 28px;">
+                <div class="progress-bar
+                    {% if pourcentage > 80 %} bg-danger
+                    {% elif pourcentage > 50 %} bg-warning
+                    {% else %} bg-success
+                    {% endif %}"
+                    role="progressbar"
+                    style="width: {{ pourcentage }}%;">
+                    {{ pourcentage }}%
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mb-3 text-danger fw-bold">
+        <img width="50" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg"
+             class="img-fluid me-2" alt="FaceSchool">
+        Mes Dossiers : [{{ TotalDossiers }}]
+    </h5>
+    <hr>
+
+    <div class="row">
+        <!-- Colonne gauche -->
+        <div class="col-lg-2 col-md-3 mb-4 shadow-sm bg-light rounded p-2">
+            <div class="card-header bg-primary text-white text-center fw-bold rounded">
+                <i class="bi bi-journal-text me-2"></i>TYPE DOCUMENTS
+            </div>
+            <div class="mt-3 d-flex flex-column gap-2">
+                {% for doc in TypeDocs %}
+                    <a href="{% url 'ListeDossiersPartType' pk doc.TypeDoc %}"
+                       class="text-decoration-none text-dark fw-semibold d-block py-2 px-2 rounded hover-bg">
+                        <i class="bi bi-bookmark-fill text-primary me-1"></i>{{ doc.TypeDoc }}
+                    </a>
+                {% endfor %}
+            </div>
+
+            {% if type_doc %}
+            <form method="POST" enctype="multipart/form-data"
+                  action="{% url 'ListeDossiersPartType' pk type_doc %}"
+                  class="p-3 shadow-sm rounded bg-white mt-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="Niveau" class="form-label"><b>Niveau :</b></label>
+                    <select class="form-select" name="Niveau" id="Niveau">
+                        {% for niv in niveau %}
+                            <option value="{{ niv.niveau }}">{{ niv.niveau }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <center><button type="submit" class="btn btn-primary w-100">OK</button></center>
+            </form>
+            {% endif %}
+        </div>
+
+        <!-- Colonne centrale -->
+        <div class="col-lg-7 col-md-7 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white fw-bold d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-journal-text me-2"></i>MES DOCUMENTS</span>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="searchInput" class="form-control form-control-sm"
+                               placeholder="Rechercher un document...">
+                        <button class="btn btn-light btn-sm" onclick="exportTableToExcel('tableDocs')">
+                            <i class="bi bi-file-earmark-excel text-success"></i>
+                        </button>
+                        <button class="btn btn-light btn-sm" onclick="window.print()">
+                            <i class="bi bi-printer-fill text-danger"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="tableDocs" class="table table-striped table-bordered align-middle mb-0">
+                        <thead class="table-success text-center">
+                            <tr>
+                                <th>Discipline</th>
+                                <th>Niveau</th>
+                                <th>Titre</th>
+                                <th>Type</th>
+                                <th>Documents</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in ListeDossiers %}
+                            <tr>
+                                <td>{{ doc.Discipline_id }}</td>
+                                <td>{{ doc.Niveau }}</td>
+                                <td>{{ doc.Titre }}</td>
+                                <td>{{ doc.TypeDoc }}</td>
+                                <td>
+                                    {% if doc.Document %}
+                                        <a href="{{ doc.Document.url }}" download class="btn btn-outline-primary btn-sm">
+                                            Télécharger
+                                        </a>
+                                    {% endif %}
+                                    {% if Types == 'Formateur' %}
+                                        <a href="{% url 'Transfert_document' doc.id %}"
+                                           class="btn btn-outline-secondary btn-sm">Transférer</a>
+                                    {% elif Types == 'Apprenant' %}
+                                        <a href="{% url 'Transfert_documentGrpEtude' doc.id %}"
+                                           class="btn btn-outline-secondary btn-sm">Transférer</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if doc.username_id == request.user.id %}
+                                        <a href="{% url 'Modifier_Dossiers' doc.id %}"
+                                           class="btn btn-outline-primary btn-sm">Modifier</a>
+                                        <a href="{% url 'SupDossiers' doc.id %}"
+                                           onclick="return confirm('Voulez-vous vraiment supprimer ce document ?')"
+                                           class="btn btn-outline-danger btn-sm">
+                                           <i class="bi bi-trash"></i>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-danger">Aucun document trouvé.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- Pagination -->
+                {% if ListeDossiers.has_other_pages %}
+                <nav class="mt-2">
+                    <ul class="pagination justify-content-center">
+                        {% if ListeDossiers.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ ListeDossiers.previous_page_number }}">Précédent</a></li>
+                        {% endif %}
+                        {% for num in ListeDossiers.paginator.page_range %}
+                            <li class="page-item {% if ListeDossiers.number == num %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if ListeDossiers.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ ListeDossiers.next_page_number }}">Suivant</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Colonne droite -->
+        <div class="col-lg-3 col-md-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center fw-bold">
+                    <i class="bi bi-upload me-2"></i>Déposer un Document
+                </div>
+                <div class="card-body bg-light">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" style="color: red">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="POST" enctype="multipart/form-data" class="p-3 shadow rounded bg-white">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Modal augmentation du quota -->
+<div class="modal fade" id="ModalQuota" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Demande d’augmentation du stockage</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form method="post" action="{% url 'demande_quota' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+
+            <label class="form-label">Nouvelle capacité souhaitée (Go)</label>
+            <input type="number" name="capacite" class="form-control" min="1" required>
+
+            <small class="text-muted d-block mt-2">
+                La demande sera traitée par l’administrateur dans les plus brefs délais.
+            </small>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">
+              Envoyer la demande
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+</div>
+<!-- SCRIPT CHART -->
+<script>
+    const ctx = document.getElementById('chartStockage');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels|safe }},
+            datasets: [{
+                label: "Stockage utilisé (Mo)",
+                data: {{ data|safe }},
+                borderWidth: 3,
+                tension: 0.3,
+                borderColor: "#0d6efd",
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+
+<!-- Scripts -->
+<script>
+    // Recherche dynamique
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const filter = this.value.toLowerCase();
+        document.querySelectorAll('#tableDocs tbody tr').forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
+        });
+    });
+
+    // Export Excel
+    function exportTableToExcel(tableID, filename = 'Documents.xlsx') {
+        let dataType = 'application/vnd.ms-excel';
+        let tableSelect = document.getElementById(tableID);
+        let tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        let downloadLink = document.createElement("a");
+        document.body.appendChild(downloadLink);
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        downloadLink.download = filename;
+        downloadLink.click();
+    }
+
+function validateFileSize(input) {
+    const file = input.files[0];
+    if (file) {
+        const maxSize = 20 * 1024 * 1024;
+        const allowedExtensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.png', '.jpeg', '.jpg'];
+        const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+        if (file.size > maxSize) {
+            alert("⚠️ Le fichier dépasse 20 Mo.");
+            input.value = "";
+        } else if (!allowedExtensions.includes(ext)) {
+            alert("⚠️ Type de fichier non autorisé : " + ext);
+            input.value = "";
+        }
+    }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+{% endblock content %}

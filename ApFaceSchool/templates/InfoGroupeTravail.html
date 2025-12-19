@@ -1,0 +1,60 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+<div class="container-fluid">
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 m-3">
+        <img width="8%" src="{% static 'images/Accueil/groupeetude.png' %}"/><b style="color : red"> Groupe de Travail</b>
+
+         <hr>
+         <!--button type="submit" class="btn btn-primary btn-md"> <a href="{% url 'CreerClasses' %}"><b class="text-white">Créer une Classe</b></a></button-->
+         <center> <button type="submit" class="btn btn-primary btn-md"> <b class="text-white">Qu'est ce qu'un Groupe de Travail ?</b></a></button></center>
+         <hr>
+         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 m-3 bloc-style  shadow">
+             <div class="row">
+                 <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5 bloc-style m-1" style="background-color: #f0f8ff">
+                     <b>Un Groupe de Travail :</b>
+                      <hr>
+                    Un groupe de travail est un ensemble de personnes réunies pour collaborer sur un objectif commun,
+                     généralement dans un cadre éducatif, professionnel ou associatif.
+                     Cela permet d’organiser des réunions, des partages de documents ou des suivis de projets par groupe.
+                     Le Groupe de Travail concerne les Formateurs sur FaceSchool
+
+                           <br> Avec FaceSchool, un Formateur pourra :<br><br>
+                    <ul>
+                        <li><i class="fa-solid fa-chalkboard"></i><b> Créer Un Groupe Groupe de Travail</b></li>
+                        <li><i class="fa-solid fa-share-nodes"></i><b > Partager des Documents </b></li>
+                        <li><i class="fa-solid fa-video"></i><b> Faire des reunions en ligne</b></li>
+                        <li><i class="fa-solid fa-people-arrows"></i><b> Signer un Partenariat entre Groupe de Travail</b></li>
+                         <li><i class="fa-solid fa-user"></i><b> Inviter d'autres Formateurs dans son Groupe</b></li>
+                    </ul>
+                     <hr>
+                     <div class="d-flex justify-content-between align-items-center ">
+                        {% if Types == "Formateur" %}
+                            <a href="{% url 'GroupeTrav' %}" class="btn btn-secondary">Créer Mon Groupe de Travail</a>
+                        {% endif %}
+                    </div>
+                 </div>
+
+                <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5 bloc-style ml-1" style="background-color: #f0f8ff">
+                     <center><b style="color: blue">Formateur en présentiel et En Ligne</b></center>
+                    <hr>
+                     <center><b style="color: green">Formateur en présentiel</b></center>
+                    <b> <img class="zoom-hover" width="100%" src="{% static 'images/Page/groupeTravail.png' %}"  alt="FaceSchool"/></b>
+                     <center><b style="color: green">Formateur  En Ligne</b></center>
+                    <b> <img class="zoom-hover" width="100%" src="{% static 'images/Page/GRPTRAV.png' %}"  alt="FaceSchool"/></b>
+                    <center><b style="color: red">Combiner l'étude en Présentiel et l'étude en ligne, nous rend plus efficace dans notre Etude.</b></center>
+                </div>
+
+            <br>
+             <br><br>
+             <div>
+                <b style="color: red"><center> <img src="{% static 'images/Accueil/gauche.gif' %}"  alt="FaceSchool"/>  AVEC FACESCHOOL  <img src="{% static 'images/Accueil/droite.gif' %}"  alt="FaceSchool"/></center></b>
+             </div>
+         </div>
+    </div>
+    <hr>
+</div>
+
+{% endblock content %}

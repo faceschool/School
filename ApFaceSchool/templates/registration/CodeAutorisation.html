@@ -1,0 +1,117 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+    /* Animation d’apparition */
+    .fade-in {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Effet hover sur la carte */
+    .card-animated {
+        transition: 0.3s ease;
+        border-radius: 15px;
+    }
+    .card-animated:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+
+    /* Champ input amélioré */
+    .input-effect:focus {
+        border-color: #0d6efd !important;
+        box-shadow: 0 0 6px rgba(13, 110, 253, .5) !important;
+        transition: 0.2s;
+    }
+
+    /* Bouton animé */
+    .btn-animated {
+        transition: 0.3s ease;
+        border-radius: 30px;
+    }
+    .btn-animated:hover {
+        transform: scale(1.05);
+    }
+</style>
+
+
+<div class="row justify-content-center mt-4 fade-in">
+
+    <!-- Informations -->
+    <div class="col-lg-4 m-3 bg-danger text-white shadow">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success fade-in">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+
+
+        <h5 class="mb-3"><b>INFORMATION</b></h5>
+         <hr>
+        <p>
+            Pour vous inscrire, vous devez disposer d’un
+            <b>code d’autorisation d’inscription</b>.
+            Ce code peut être fourni par :
+        </p>
+
+        <ul>
+            <li><b>Un Formateur</b></li>
+            <li><b> Un Apprenant</b></li>
+            <li><b>Face School</b></li>
+        </ul>
+
+        <p>
+            Consultez le groupe WhatsApp pour obtenir votre code.
+        </p>
+
+    </div>
+
+    <!-- Formulaire du code -->
+    <div class="col-lg-4">
+        <div class="card shadow m-3 card-animated">
+            <div class="card-body">
+
+                <h5 class="card-title text-center mb-4">
+                    <img src="{% static 'images/Page/clef.png' %}"
+                         alt="FaceSchool"
+                         class="img-fluid" width="30%">
+                </h5>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            name="CodeAutorisation"
+                            id="CodeAutorisation"
+                            class="form-control input-effect"
+                            placeholder="Votre code d'autorisation"
+                            required
+                        >
+                    </div>
+
+                    <center>
+                        <button type="submit" class="btn btn-primary btn-animated w-50">
+                            Valider
+                        </button>
+                    </center>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock content %}
+

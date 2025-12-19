@@ -1,0 +1,43 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-3 m-3">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                    {% endfor %}
+                {% endif%}
+            </div>
+             <div class="col-lg-6 m-5 shadow">
+                <div class="card w-15 m-3">
+                  <div class="card-body bg-info">
+                    <h5 class="card-title text-center"> <img src="{% static 'images/Logo/inscription.png' %}" class="img-fluid" alt="FaceSchool"/></h5>
+                      <br>
+                    <p class="card-text">
+                        <form method="post">
+                            {% csrf_token %}
+                           {{ form.as_p  }}
+                      <br>
+                           <center> <button type="submit" class="btn btn-primary">s'inscrire</button></center>
+                        </form>
+
+                    </p>
+
+                  </div>
+            </div>
+            </div>
+             <div class="col-lg-2">
+
+            </div>
+        </div>
+
+</div>
+
+
+
+{% endblock %}

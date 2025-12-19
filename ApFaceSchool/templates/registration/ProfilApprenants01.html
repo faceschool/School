@@ -1,0 +1,146 @@
+{% extends "Menus/MenuEspaceApp.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+
+            <!-- Card principale -->
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 style="color:white"><i class="bi bi-person-circle"></i> Complétez Votre Profil</h3>
+                </div>
+
+                <div class="card-body">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} shadow-sm" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <p class="text-muted small">
+                        L'inscription des Apprenants se fait en une seule fois. Tout Apprenant qui demeure sans activité pendant 3 mois sera supprimé automatiquement.
+                    </p>
+
+                    <form method="post" enctype="multipart/form-data" class="row g-4 needs-validation" action="{% url 'ajouter_ProfilApprenant' %}" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Informations de compte -->
+                        {% if request.user.is_authenticated %}
+                            <div class="col-12">
+                                <div class="card border-info mb-3">
+                                    <div class="card-header bg-info text-white">
+                                        <i class="bi bi-person-badge"></i> Informations du Compte
+                                    </div>
+                                    <div class="card-body row g-3">
+                                        <div class="col-md-4">
+                                            <label for="username_id" class="form-label">User ID(*)</label>
+                                            <input type="text" class="form-control" id="username_id" name="username_id" value="{{ request.user.id }}" readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="LoginAp" class="form-label">Login(*)</label>
+                                            <input type="text" class="form-control" id="LoginAp" name="LoginAp" value="{{ user }}" readonly required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="email" class="form-label">E-mail(*)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" readonly required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Informations personnelles -->
+                        <div class="col-12">
+                            <div class="card border-success mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <i class="bi bi-card-text"></i> Informations Personnelles
+                                </div>
+                                <div class="card-body row g-3">
+                                    <div class="col-md-4">
+                                        <label for="MatriculeAp" class="form-label">Matricule(*)</label>
+                                        <input type="text" class="form-control" id="MatriculeAp" name="MatriculeAp" maxlength="15" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="nomAp" class="form-label">Nom(*)</label>
+                                         <input type="text" class="form-control" name="nomAp" value="{{ Appren.Nom }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="prenomAp" class="form-label">Prénom(*)</label>
+                                       <input type="text" class="form-control" name="prenomAp" value="{{ Appren.Prenom }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="DateNaissance" class="form-label">Date de Naissance(*)</label>
+                                        <input type="text" class="form-control" name="DateNaissance" value="{{ Appren.DateNaissance }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="TelAp" class="form-label">Téléphone(*)</label>
+                                         <input type="tel" class="form-control" name="TelAp" value="{{ Appren.Tel }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Pays" class="form-label">Pays(*)</label>
+                                        <input type="text" class="form-control" name="Pays" value="{{ Appren.Pays }}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations académiques -->
+                        <div class="col-12">
+                            <div class="card border-warning mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <i class="bi bi-book"></i> Informations Académiques
+                                </div>
+                                <div class="card-body row g-3">
+                                    <div class="col-md-4">
+                                        <label for="Type" class="form-label">Type(*)</label>
+                                       <input type="text" class="form-control" value="{{ Appren.Type }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Sexe" class="form-label">Sexe(*)</label>
+                                         <input type="text" class="form-control" value="{{ Appren.Sexe }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Niveau" class="form-label">Niveau(*)</label>
+                                       <input type="text" class="form-control" value="{{ Appren.Niveau }}" readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="CodeEts" class="form-label">Code ETS(*)</label>
+                                       <input type="text" class="form-control" name="CodeEts" value="{{ Appren.CodeEts }}" readonly>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label for="photo" class="form-label">Votre Photo</label>
+                                        <input type="file" class="form-control" id="photo" name="photo" accept=".jpg,.jpeg,.png">
+                                        <small class="text-danger">Format image: jpg, png, jpeg. Taille max: 300 Ko.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bouton Soumettre -->
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle"></i> Soumettre
+                            </button>
+                            <p class="mt-2 text-muted">(*)-Obligatoire</p>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- N'oubliez pas d'inclure Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+
+{% endblock content %}

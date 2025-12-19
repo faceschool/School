@@ -1,0 +1,135 @@
+{% extends "Menus/MenuEspaceApp.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid">
+ <div class="m-3"><center><button  class="btn btn-info "><b class="titre-principal">PARTENARIAT ENTRE GROUPE D'ETUDE </b></button></center></div>
+    <div class="row justify-content-center">
+         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 shadow">
+             <img class="img-fluid " width="100%" src="https://www.win-france.org/win/wp-content/uploads/2018/07/iratech-partenariat.jpg"  />
+         </div>
+         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 shadow">
+             Chaque <b>APPRENANT</b> peut signer  autant de partenariat avec d'autres <b>GROUPE D'ETUDE</b> qu'il souhaite.
+             <br>Ces <b>GROUPES</b> en partenariat peuvent accéder aux documents de l'autre GROUPE partenaire de même NIVEAU.
+             <br>Pour établir un<b> Partenariat</b> vous devez utiliser  le <b>Code d'invitation</b> qui sert aussi à créer un partenariat entre GROUPE.
+         </div>
+
+        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4 shadow">
+            <hr>
+             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+                {% if messages %}
+                     <div>
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                        {% endfor %}
+                     </div>
+                {% endif%}
+            </div>
+             {% if form.non_field_errors %}
+                <div>
+                    {% for error in form.non_field_errors %}
+                        <p>error</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <hr>
+            <form method="post">
+                {% csrf_token %}
+                 {% if form.field_errors %}
+                <div>
+                    {% for error in form.field_errors %}
+                        <p>error</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+                 <div class="form-group">
+                    <label for="formGroupExampleInput"><b>GROUPE D'ETUDE :</b></label>
+                    <input type="text" name="NomGROUPE"  class="form-control" id="formGroupExampleInput" VALUE="{{MGroupeEtude.Groupe}}-{{MGroupeEtude.id}}" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput2"><b>Niveau :</b></label>{{ MGroupeEtude.Niveau}}
+                  </div>
+                 <!--div class="form-group">
+                    <label for="formGroupExampleInput2"><b>CLASSE PARTENAIRE :</b></label>
+                   <select class="form-control"  name="IDClasse" id="formGroupExampleInput2">
+                           {% for Class in  MesClasses %}
+                            <option value="{{Class.id}}">{{Class.NomClasse}}-{{Class.Login}}</option>
+                          {% endfor %}
+                      </select>
+                  </div-->
+                 {% if MGroupeEtude.username_id == request.user.id %}
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2"><b>CODE PARTENAIRE :</b></label>
+                        <input type="text" name="CodeAffect" class="form-control" id="formGroupExampleInput2" placeholder="Code Partenaire" required>
+                    </div>
+                    <hr>
+                   <center> <button type="submit" class="btn btn-success btn-md m-3">VALIDER PARTENARIAT</button></center>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+<div class="row justify-content-center m-1">
+     <div class="col-md-6 col-xs-6 col-sm6 col-lg-6 shadow">
+          <table class="table table-striped table-bordered m-3">
+              <thead class="table-success">
+                <tr>
+                  <th scope="col">#</th>
+                  <th>Groupe</th>
+                  <th>Discipline</th>
+                    <th>Responsable</th>
+                     <th>Documents</th>
+                     <th>SUPPRIMER</th>
+
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+
+
+                   {% for Listes in ListePartenariats %}
+
+                       {% if  Listes.GroupeEtudPartenaire_id != pk %}
+
+                              <tr>
+                                  <th>{{ Listes.id }}</th>
+                                  <td>{{ Listes.GroupeEtudPartenaire.Groupe}}-{{ Listes.GroupeEtudPartenaire_id}}</td>
+                                  <td>{{Listes.GroupeEtudPartenaire.Niveau}}</td>
+                                  <td>{{Listes.GroupeEtudPartenaire.Responsable}}</td>
+                                  <td width="15%">
+                                      <a   href="{% url 'ListeDocumentPartGrpEtude' Listes.GroupeEtudPartenaire_id  %}"><img width="30%" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid" alt="FaceSchool"/></a>
+                                  </td>
+                                  <td width="15%">
+
+                                        <a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="{% url 'SuppPartenariatGrpEtude' Listes.id %}"><img width="35%" src="{% static 'images/Logo/corbeille.png' %}" alt="FaceSchool"/></a>
+
+                                  </td>
+                              </tr>
+                        {% endif %}
+                        {% if   Listes.GroupeEtudDemandeur_id != pk %}
+                            <tr>
+                                  <th>{{ Listes.id }}</th>
+                                  <td>{{ Listes.GroupeEtudDemandeur.Groupe}}-{{ Listes.GroupeEtudDemandeur_id}}</td>
+                                  <td>{{Listes.GroupeEtudDemandeur.Niveau}}</td>
+                                  <td>{{Listes.GroupeEtudDemandeur.Responsable}}</td>
+                                  <td width="15%">
+                                      <a   href="{% url 'ListeDocumentPartGrpEtude' Listes.GroupeEtudDemandeur_id  %}"><img width="30%" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid" alt="FaceSchool"/></a>
+                                  </td>
+                                  <td width="15%">
+
+                                        <a class="nav-link text-white" onclick="return confirm('Voulez-vous supprimer le Partenariat ?')" href="{% url 'SuppPartenariatGrpEtude' Listes.id %}"><img width="35%" src="{% static 'images/Logo/corbeille.png' %}" alt="FaceSchool"/></a>
+
+                                  </td>
+                              </tr>
+                        {% endif %}
+                   {% empty %}
+                       <tr><td colspan="30"><center style="color : red">Aucun partenariat trouvé.</center></td></tr>
+                 {% endfor %}
+
+              </tbody>
+            </table>
+      </div>
+
+ </div>
+
+</div>
+
+{% endblock content %}

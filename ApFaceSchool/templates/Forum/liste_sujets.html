@@ -1,0 +1,43 @@
+{% extends base_template %}
+{% block content %}
+{% load static %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="titre-principal text-primary">
+      <i class="bi bi-chat-left-text"></i> Forum - Sujets de discussion
+    </h2>
+    <a href="{% url 'nouveau_sujet' %}" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Nouveau Sujet
+    </a>
+  </div>
+
+  <ul class="list-group">
+    {% for sujet in sujets %}
+      <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start mb-2 shadow-sm rounded">
+        <div>
+          <a href="{% url 'detail_sujet' sujet.pk %}" class="fw-bold text-decoration-none">
+            {{ sujet.titre }}
+          </a>
+          <br>
+          <small class="text-muted">Posté par {{ sujet.auteur }} - {{ sujet.create_at|date:"d/m/Y H:i" }}</small>
+        </div>
+
+        <div class="mt-2 mt-md-0 d-flex align-items-center">
+          <!-- Badge pour le nombre de messages -->
+          <span class="badge bg-success me-3">
+            {{ sujet.messages.count }} message{{ sujet.messages.count|pluralize }}
+          </span>
+          <a href="{% url 'detail_sujet' sujet.pk %}" class="btn btn-outline-primary btn-sm">
+            Voir le sujet
+          </a>
+        </div>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-center text-muted">
+        Aucun sujet pour le moment.
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

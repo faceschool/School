@@ -1,0 +1,158 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid py-3">
+
+  <!-- Bandeau supérieur -->
+  <div class="row align-items-center mb-3">
+    <div class="col-md-2 d-flex align-items-center gap-2">
+      <img src="{{ nomgroup.logo.url }}" alt="Logo Groupe" width="50" class="rounded shadow-sm">
+      <h5 class="text-danger fw-bold mb-0">Groupe {{ nomgroup.Groupe }}</h5>
+    </div>
+    <div class="col-md-4 offset-md-2 text-center">
+      <img src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg"
+           alt="Documents" width="40" class="me-2">
+      <span class="fs-5 fw-bold text-danger">MES DOCUMENTS DE GROUPE DE TRAVAIL</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row g-3">
+
+    <!-- Colonne gauche : Types de documents -->
+    <div class="col-lg-2 col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-header text-center bg-primary text-white fw-bold">
+          <i class="bi bi-journal-text me-1"></i> Type Documents
+        </div>
+        <div class="card-body p-2">
+          <table class="table table-hover table-sm align-middle mb-3">
+            {% for type in TypeDocs %}
+            <tr>
+              <td>
+                <a href="{% url 'ListeDocGRPTravPartType' pk type.TypeDoc %}" class="text-decoration-none fw-semibold text-dark">
+                  {{ type.TypeDoc }}
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+
+          {% if type_doc %}
+          <form method="POST" enctype="multipart/form-data"
+                action="{% url 'ListeDocGRPTravPartType' pk type_doc %}">
+            {% csrf_token %}
+            <label class="form-label fw-bold">Niveau :</label>
+            <select class="form-select mb-2" name="Niveau" id="Niveau">
+              {% for niv in niveau %}
+              <option value="{{ niv.niveau }}">{{ niv.niveau }}</option>
+              {% endfor %}
+            </select>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-sm fw-bold">OK</button>
+            </div>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne centrale : Liste des documents -->
+    <div class="col-lg-6 col-md-9">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white text-center fw-bold">
+          Documents Groupe de Travail
+        </div>
+        <div class="card-body table-responsive">
+          {% if type_doc %}
+          <div class="mb-2 text-center">
+            Trié par : <b class="text-danger">{{ type_doc }}</b>
+            {% if Class %}
+            | Niveau : <b class="text-danger">{{ Class }}</b>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <table class="table table-striped table-bordered align-middle">
+            <thead class="table-success text-center">
+              <tr>
+                <th>#</th>
+                <th>Discipline</th>
+                <th>Niveau</th>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Documents</th>
+                <th>Modifier</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for doc in ListeDossiers %}
+              <tr>
+                <td>{{ doc.id }}</td>
+                <td>{{ doc.Discipline_id }}</td>
+                <td>{{ doc.Niveau }}</td>
+                <td>{{ doc.Titre }}</td>
+                <td>{{ doc.TypeDoc }}</td>
+                <td class="text-center">
+                  <a href="{{ doc.Document.url }}" download class="btn btn-outline-primary btn-sm">Télécharger</a>
+                  <a href="{% url 'Transfert_document' doc.id %}" class="btn btn-outline-success btn-sm">Transférer</a>
+                </td>
+                <td class="text-center">
+                  <a href="{% url 'Modifier_DossiersGrpTrav' doc.id %}" class="btn btn-warning btn-sm text-white">Modifier</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne droite : Formulaire ajout document -->
+    <div class="col-lg-4 col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white text-center fw-bold">
+          Ajouter un Document
+        </div>
+        <div class="card-body">
+          {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} shadow-sm">{{ message }}</div>
+          {% endfor %}
+          {% endif %}
+
+          <form method="POST" action="{% url 'Ajouter_dossiersGrpTrav' pk %}" enctype="multipart/form-data">
+             {% csrf_token %}
+              {{ form.as_p }}
+            <center><button type="submit" class="btn btn-primary">Enregistrer</button></center>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+function validateFileSize(input) {
+    const file = input.files[0];
+    if (file) {
+        const maxSize = 20 * 1024 * 1024; // 20 Mo
+        const allowedExtensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.png', '.jpeg', '.jpg'];
+        const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+        if (file.size > maxSize) {
+            alert("⚠️ Le fichier dépasse 20 Mo.");
+            input.value = "";
+        } else if (!allowedExtensions.includes(ext)) {
+            alert("⚠️ Type de fichier non autorisé : " + ext);
+            input.value = "";
+        }
+    }
+}
+</script>
+<!-- ====== Bootstrap Icons ====== -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+{% endblock content %}

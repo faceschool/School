@@ -1,0 +1,165 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+ <div class="container">
+            <div class="row justify-content-center mt-3">
+
+                <div class="col-12 col-md-8 m-5">
+                <div class="row">
+                        <div class="col-12 col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                            <div class="card text-bg-success mb-3 shadow">
+                                <div class="card-header fond"><center><b>INFORMATION</b></center></div>
+                                <div class="card-body fonds">
+                                    <p class="card-text">
+                                          L'inscription des Apprenants se fait en une seule fois,tout Apprenant qui s'inscrit et qui demeure sans activité pendant
+                                        3 mois sera supprimé automatiquement. Après votre inscription, le changement de niveau par Upgrade.
+                                         <center>
+                                            {% if user.is_authenticated %}
+                                             <button class="btn btn-danger "><a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="">Supprimer un compte erroné</a> </button>
+                                           {% endif %}
+                                        </center>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card text-bg-success mb-3 shadow">
+
+                        <div class="card-body">
+                             <div class="card-header mb-3"><center>VOTRE PROFIL </center></div>
+                                <div class="row">
+                                    <div class="col-lg-8">
+
+                                    </div>
+                                    <div class="col-lg-3 m-3">
+                                         {% if Appren.Photo %}
+                                            <img src="{{ Appren.Photo.url }}" width="100" class="img-fluid"  alt="FaceSchool"/>
+                                         {% endif %}
+                                    </div>
+
+                                </div>
+
+                                <form method="post" class="row g-3 needs-validation" enctype="multipart/form-data" action="{% url 'update_ProfilApprenant' %}" novalidate >
+                                     {% csrf_token %}
+                                     {% if request.user.is_authenticated %}
+                                     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="validationCustom01" class="form-label">User ID(*)</label>
+                                        <input type="text" class="form-control @error('username_id') is-invalid @enderror" id="username_id" name="username_id" value="{{ request.user.id }} "   readonly required>
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="validationCustom01" class="form-label">Login(*)</label>
+                                        <input type="text" class="form-control @error('LoginAp') is-invalid @enderror" id="LoginAp" name="LoginAp" value="{{user}}"   readonly required>
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="email" class="form-label">E-mail(*)</label>
+                                        <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ Appren.Email }}" placeholder="Exemple: nom@societe.com" readonly required>
+                                        </div>
+
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="MatriculeAp" class="form-label">Matricule(*)</label>
+                                        <input type="text" class="form-control @error('MatriculeAp') is-invalid @enderror" maxlength="15" id="MatriculeAp" name="MatriculeAp" value="{{Appren.Matricule}}" readonly>
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="nomAp" class="form-label">Nom(*)</label>
+                                        <input type="text" class="form-control @error('nomAp') is-invalid @enderror" id="nomAp" name="nomAp" maxlength="15"  value="{{Appren.Nom}}">
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="prenomAp" class="form-label">Prénom(*)</label>
+                                        <input type="text" class="form-control @error('prenomAp') is-invalid @enderror" id="prenomAp" name="prenomAp" maxlength="30"  value="{{Appren.Prenom}}" required>
+
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="DateNaissance" class="form-label">Date Naissance(*)</label>
+                                        <input type="date" class="form-control @error('DateNaissance') is-invalid @enderror" id="DateNaissance" name="DateNaissance" value="{{Appren.DateNaissance}}" required>
+
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="TelForm" class="form-label">Téléphone(*)</label>
+                                        <input type="tel" partten="[0-9]{10}" class="form-control @error('TelAp') is-invalid @enderror" id="TelAp" name="TelAp"  value="{{Appren.Tel}}">
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="Pays" class="form-label">Pays(*)</label>
+                                        <input type="text" class="form-control @error('Pays') is-invalid @enderror" id="Pays" name="Pays" value="{{Appren.Pays}}"   required>
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                         <label for="validationCustom10" class="form-label">Type(*)</label>
+                                        <select class="form-select" name="Type" id="validationCustom10" required>
+                                            <option selected  value="{{Appren.Type}}">Apprenant</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a valid Type.
+                                        </div>
+                                         </div>
+                                    </div>
+                                   <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label  class="form-label">Sexe</label>
+                                         <select class="form-select" name="Sexe" id="validationCustom09" required>
+                                            <option value="{{Appren.Sexe}}">{{Appren.Sexe}}</option>
+                                            <option>F</option>
+                                         </select>
+                                         </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                         <label for="validationCustom10" class="form-label">Niveau(*)</label>
+                                            <select class="form-select" name="Niveau" id="validationCustom10">
+                                                <option value="{{Appren.Niveau}}" selected>{{Appren.Niveau}}</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Please select a valid Type.
+                                            </div>
+                                         </div>
+                                    </div>
+                                    <div class="col-12 col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="CodeEts" class="form-label">Code ETS(*)</label>
+                                        <input type="text" class="form-control @error('CodeEts') is-invalid @enderror" value="{{Appren.CodeEts}}" id="CodeEts" name="CodeEts" >
+
+                                    </div>
+
+                                         <div class="col-md-8 col-xs-8 col-sm-8 col-lg-12">
+                                             <br><br>
+                                        <label for="validationCustom11" class="form-label">Votre Photo : {{Appren.Photo}}</label>
+                                          <input type="text" class="form-control @error('image') is-invalid @enderror" value="{{Appren.Photo}}" id="image" name="image" hidden>
+                                        <input type="file" class="form-control" value="{{Appren.Photo}}"  name="photo" id="validationCustom11">
+                                        <b class="btn btn-danger">Format image : jpg,png,jpeg Taille maxi:300 KO</b>
+
+                                    </div>
+
+                                    <div class="col-12 m-3">
+                                       <center> <button class="btn btn-primary btn-md" type="submit">Modifier</button></center>
+                                        (*)-Obligatoire
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+<script>
+  $('.datepicker').datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    todayHighlight: true,
+    language: 'fr'
+  });
+</script>
+
+{% endblock content %}

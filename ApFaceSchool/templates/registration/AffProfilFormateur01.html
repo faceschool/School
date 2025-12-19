@@ -1,0 +1,114 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+            <div class="row justify-content-center m-3">
+                <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                            <div class="card text-bg-white mb-3 shadow">
+                                <div class="card-header fond"><center><b>MODIFIEZ VOTRE PROFIL</b></center></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card text-bg-white mb-3 shadow">
+
+                        <div class="card-body">
+                            {% if forma.Photo %}
+                                 <p>Photo actuelle :</p>
+                                 <img src="{{ forma.Photo.url }}" alt="Photo" width="150">
+                            {% endif %}
+                            <hr>
+                             <form method="post" class="row g-3 needs-validation" enctype="multipart/form-data" action="{% url 'update_ProfilFormateur' request.user.id %}" >
+                                     {% csrf_token %}
+                                     {% if request.user.is_authenticated %}
+                                     <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="validationCustom01" class="form-label">User ID(*)</label>
+                                        <input type="text" class="form-control" id="username_id" name="username_id" value="{{ request.user.id }} "   readonly>
+                                    </div>
+
+                                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="validationCustom01" class="form-label">Login(*)</label>
+                                        <input type="text" class="form-control" id="LoginAp" name="LoginAp" value="{{user}}"   readonly>
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="email" class="form-label">E-mail(*)</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                            <input type="email" class="form-control" id="email" name="email" value="{{ forma.Email }}"  readonly >
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="MatriculeForm " class="form-label">Matricule(*)</label>
+                                        <input type="text" class="form-control " maxlength="15" id="MatriculeForm " name="MatriculeForm " value="{{forma.Matricule }}" readonly>
+
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="nomAp" class="form-label">Nom(*)</label>
+                                        <input type="text" class="form-control" id="nomForm" name="nomForm" maxlength="15"  value="{{forma.Nom}}" readonly>
+
+                                    </div>
+                                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="prenomForm" class="form-label">Prénom(*)</label>
+                                        <input type="text" class="form-control" id="prenomForm" name="prenomForm" maxlength="30"  value="{{forma.Prenom}}" readonly>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="DateNaissance" class="form-label">Date Naissance(*)</label>
+                                        <input type="text" class="form-control datepicker " id="DateNaissance" name="DateNaissance" value="{{forma.DateNaissance}}" readonly>
+
+                                    </div>
+
+                                        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-6">
+                                             <label for="validationCustom10" class="form-label">Type(*)</label>
+                                            <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Type}}"   readonly>
+                                         </div>
+
+                                        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-6">
+                                                <label for="validationCustom10" class="form-label">Discipline(*)</label>
+                                                <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Discipline}}"   readonly>
+                                         </div>
+                                         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                            <label for="TelForm" class="form-label">Téléphone(*)</label>
+                                            <input type="tel" partten="[0-9]{10}" class="form-control" id="TelForm" name="TelForm"  value="{{forma.Tel}}" readonly>
+                                        </div>
+                                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                        <label for="Pays" class="form-label">Pays(*)</label>
+                                        <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Pays}}"   readonly>
+
+                                    </div>
+                                        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                                            <label  class="form-label">Sexe</label>
+                                             <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Sexe}}"   readonly>
+                                         </div>
+
+                                    <div class="col-12 m-2">
+                                       <!--center> <button class="btn btn-primary btn-md" type="submit">Modifier</button></center-->
+                                        (*)-Obligatoire
+                                        <br><br>
+
+                                           <center> <button type="submit" class="btn btn-primary btn-md"> <a class="nav-link text-white mr-6" href="{% url 'ProfilModifier' request.user.id %}">Modifier profil</a></button></center>
+
+                                    </div>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+</div>
+
+{% endblock content %}

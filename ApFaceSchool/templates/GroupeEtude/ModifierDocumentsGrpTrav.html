@@ -1,0 +1,145 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+{% load custom_filters %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2 mb-2 shadow ">
+            <img src="{{nomgroupe.logo.url }}" alt="Photo" width="30%"><b style="color: red"> Groupe {{nomgroupe.Groupe}}</b>
+        </div>
+          <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
+          </div>
+
+         <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4 m-2 shadow ">
+           <center> <img  width="10%" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid"   alt="FaceSchool"/>
+               <b> <label  class="form-label" style="color: red">MES DOCUMENTS DE GROUPE DE TRAVAIL</label></b></center>
+
+         </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2 m-2 shadow">
+             <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                 {% if form.errors %}
+                  <ul>
+                    {% for field in form %}
+                      {% for error in field.errors %}
+                        <li>{{ field.label }} : {{ error }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                 <div>
+                     {% for error in form.non_field_errors %}
+                     <p>error</p>
+                     {% endfor %}
+                 </div>
+                 {% endif %}
+                 {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                        {% endfor %}
+                 {% endif%}
+                <div class="form-group">
+                     <center> <label for="id_Discipline" class="form-label bold-label btn btn-danger">N°Document:[ {{pk}} ]</label></center>
+                    <hr>
+
+                </div>
+                 <div class="form-group">
+                      <label for="id_Discipline">Discipline</label>
+                      {{ form.Discipline }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Niveau">Niveau</label>
+                  {{ form.Niveau }}
+                </div>
+
+                 <div class="form-group">
+                  <label for="id_Titre">Titre</label>
+                  {{ form.Titre }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_TypeDoc">Type de document</label>
+                  {{ form.TypeDoc }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Etat">État</label>
+                  {{ form.Etat }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Observation">Observation</label>
+                  {{ form.Observation }}
+                </div>
+
+
+                <div class="form-group">
+                  <label>Fichier actuel :</label><br>
+                  <a href="{{ DossiersGRPTrav.Document.url }}" target="_blank">Télécharger</a>
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Document">Remplacer le fichier</label>
+                    {{form.Document}}
+
+                </div>
+
+                <center> <button type="submit" class="btn btn-primary m-3">Enregistrer</button></center>
+             </form>
+         </div>
+        <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8 mb-1 table-responsive">
+         <div class="mb-2">Liste des Documents </div>
+
+             <table class="table table-striped table-bordered">
+                  <thead class="table-success">
+                    <tr>
+                      <!--td>#</td-->
+                      <th>Discipline</th>
+                        <th>Niveau</th>
+                      <th>Titre</th>
+                      <th>Type</th>
+                         <th>documents</th>
+                         <th>Modifier</th>
+                        <th>Supprimer</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for doc in  ListeDossiers %}
+                        <tr>
+                          <!--td>{{doc.id}}</td-->
+                          <td>{{doc.Discipline_id}}</td>
+                            <td>{{doc.Niveau}}</td>
+                             <td>{{doc.Titre}}</td>
+                          <td>{{doc.TypeDoc}}</td>
+                          <td>
+                              <button  class="btn btn-link"><a href="{{ doc.Document.url }}" download>Télécharger</a></button>
+                              <button  class="btn btn-link"> <a href="{% url 'Transfert_documentGrpTrav' doc.id %}">Transferer</a></button>
+                         </td>
+                         <td>
+                            <a  href="{% url 'Modifier_DossiersGrpTrav' doc.id %}">Modifier</a>
+                         </td>
+
+                           <td>
+                             <a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="{% url 'Supp_DossiersGrpTrav' pk %}"><img width="35%" src="{% static 'images/Logo/corbeille.png' %}" alt="FaceSchool"/></a>
+                          </td>
+
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+               </table>
+             <div class="mb-2"><button class="btn btn-info"><a class="nav-link text-white mr-6" href="{% url 'Ajouter_dossiersGrpTrav' nomgroupe.id %}">Ajouter un Document</a> </button></div>
+
+    </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}

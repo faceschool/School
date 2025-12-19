@@ -1,0 +1,61 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+            <div class="row">
+            <div class="col-lg-4">
+                 <p>{{ message }}</p>
+            </div>
+             <div class="col-lg-4 m-5 Larger ">
+                <div class="card w-15 m-3 shadow">
+                  <div class="card-body bg-info">
+                    <h5 class="card-title text-center"> <img src="{% static 'images/Logo/login.png' %}" class="img-fluid" alt="FaceSchool"/></h5>
+                    <hr>
+                    <p class="card-text bg-success">
+                        <form method="post">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                            <p class="alert alert-danger">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        <table>
+                        {% for field in form %}
+                          <tr>
+                            <td class="col-sm-6 col-form-label">{{ field.label_tag }}</td>
+                            <td class="col-sm-6 col-form-label">{{ field }}</td>
+                          </tr>
+
+                        {% endfor %}
+                         </table>
+                      <br>
+                      <center><button type="submit" class="btn btn-primary">se connecter</button></center>
+                    </form>
+
+                    </p>
+
+                  </div>
+                   <div>
+                       <p class="m-2"> Pas encore inscrit.e?
+                        <a href="{% url 'register' %}">
+                            S'inscrire
+                        </a>
+                    <br>
+                        Mot de passe oublié ?
+                        <a href="{% url 'password_reset' %}">
+                            Renouveler mon mot de passe
+                        </a>
+                    </p>
+                </div>
+            </div>
+            </div>
+             <div class="col-lg-4">
+
+            </div>
+        </div>
+
+</di>
+
+{% endblock content %}
+

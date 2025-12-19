@@ -1,0 +1,117 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid py-4">
+  <!-- En-tête -->
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h3 class="fw-bold text-primary text-uppercase">Ajouter un formateur à son groupe de travail</h3>
+      <p class="text-muted">
+        Un <b>formateur</b> peut inviter d'autres <b>formateurs</b> dans son
+        <b class="text-danger">groupe de travail</b>.
+        <br>
+        L’invitation peut se faire via le <b class="text-success">matricule</b> du formateur ou le
+        <b class="text-danger">code d’invitation</b> du groupe.
+        <br>
+        Le <b class="text-primary">code d’invitation</b> peut être communiqué à tout formateur souhaitant rejoindre ce groupe.
+      </p>
+      <hr>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <!-- Colonne gauche : Image + Formulaire -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <img
+          src="https://club-employes.com/wp-content/uploads/comment-travailler-en-equipe.webp"
+          class="img-fluid rounded mb-3 shadow-sm"
+          alt="Travail en équipe">
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} shadow-sm">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="IDGroupe" value="{{ groupes.id }}">
+
+          <div class="mb-3">
+            <label for="matricule" class="form-label fw-bold">Ajouter un formateur :</label>
+            <input
+              type="text"
+              name="Matricule"
+              id="matricule"
+              class="form-control shadow-sm"
+              placeholder="Saisir un matricule"
+              required>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success fw-bold shadow">Ajouter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Colonne droite : Liste des membres -->
+    <div class="col-lg-8 col-md-10">
+      <div class="card shadow-sm p-3">
+        <div class="card-header bg-primary text-white text-center fw-bold">
+          GROUPE : [ {{ groupes.id }} - {{ groupes.Groupe }} ]
+          | RESPONSABLE : [ {{ groupes.Responsable }} ]
+        </div>
+
+        <div class="card-body">
+          <h5 class="text-primary mb-3 fw-bold">Les membres du groupe de travail</h5>
+
+          {% if Membregroupe %}
+          <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+              <thead class="table-success text-center">
+                <tr>
+                  <th>Matricule</th>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>Discipline</th>
+                  <th>Téléphone</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for Membre in Membregroupe %}
+                  <tr>
+                    <td>{{ Membre.Matricule_id }}</td>
+                    <td>{{ Membre.Matricule.Nom }}</td>
+                    <td>{{ Membre.Matricule.Prenom }}</td>
+                    <td>{{ Membre.Matricule.Discipline_id }}</td>
+                    <td>{{ Membre.Matricule.Tel }}</td>
+                    <td>{{ Membre.Matricule.Email }}</td>
+                    <td class="text-center">
+                      <a href="{% url 'SupMembreGroupeTrav' Membre.id %}"
+                         class="btn btn-sm btn-danger"
+                         onclick="return confirm('Voulez-vous vraiment supprimer ce membre ?')">
+                        <i class="bi bi-trash"></i> Supprimer
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <p class="fw-bold mt-3 text-end text-primary">Total membres : [ {{ total_groupe }} ]</p>
+          {% else %}
+            <p class="text-center text-danger fw-bold mt-3">Aucun membre dans ce groupe</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

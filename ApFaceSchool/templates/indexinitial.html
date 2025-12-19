@@ -1,0 +1,143 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+</style>
+<div class="card-body">
+    <p class="card-text mt-3">
+    <marquee behavior="scroll" direction="left" scrollamount="15">
+        <h4 style="color :red">Bienvenue sur notre plateforme éducative, FaceSchool.</h4>
+    </marquee>
+
+      <h4 class="text-primary">Étudier avec les autres est le chemin vers la réussite</h4>
+     <hr>
+    <div class="row m-3">
+         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 m-3 bloc-style">
+             <center> <img width="100%" src="https://static.vecteezy.com/ti/vecteur-libre/p1/2779548-reunion-video-de-groupe-de-personnes-reunion-en-ligne-via-video-conference-travail-a-distance-technologie-concept-illustrationle-dans-un-style-plat-vectoriel.jpg"/>
+                 <br>
+                  <br><b style="color: red">SUIVEZ VOS FORMATIONS EN LIGNE</b>
+             </center>
+         </div>
+        <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5 m-3 bloc-style  shadow">
+             <div class="text-center bloc-style">
+                <p><strong>FACESCHOOL</strong> est un <strong>Espace de Travail collaboratif</strong>, aussi un <b>Outil de perfectionnement</b> destiné aux <b>Formateurs</b> et
+            aux <b>Apprenants</b>.
+                <br>Il donne la possibilité aux Formateurs de créer des <strong>CLASSES,GROUPE DE TRAVAIL</strong>, et aux Apprenants de creer des <strong>GROUPES D'ETUDE</strong>, de stocker leurs<strong> DOCUMENTS</strong> et de les organiser par niveau afin d'y acceder à tout moment.
+                <br>Vous pouvez voir ci-dessous les actions possibles.</p>
+            </div>
+            <br>
+            <b style="color: red"><center> <img src="{% static 'images/Accueil/gauche.gif' %}"  alt="FaceSchool"/>  AVEC FACESCHOOL  <img src="{% static 'images/Accueil/droite.gif' %}"  alt="FaceSchool"/></center></b>
+        </div>
+         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 m-3 bloc-style">
+             <center> <img width="100%" src="https://static.vecteezy.com/ti/vecteur-libre/p1/17115827-divers-employes-de-l-entreprise-ayant-un-appel-video-de-conference-d-affaires-en-ligne-sur-un-ecran-de-television-dans-la-salle-de-reunion-du-conseil-d-administration-presentation-par-videoconference-concept-global-de-formation-en-entreprise-de-groupe-virtuel-vectoriel.jpg"/>
+                 <br><b style="color: red"> DESORMAIS ETUDIER EN EQUIPE ONLINE</b>
+             </center>
+         </div>
+   </div>
+    <hr class="thickvertneon-hr">
+    <br>
+</div>
+
+<div class="container">
+ <div class="row">
+     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12"><CENTER><h2><b class="bloc-style m-3 " style="color: blue"> QUE PEUT ON FAIRE AVEC FACESCHOOL ?</b></h2></CENTER></div>
+ </div>
+     <br>
+    <hr>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card shadow ml-3 mr-3 mb-3 bloc-style-card" style="width: 18rem;">
+                <img src="{% static 'images/Accueil/classeVirtuelles.png' %}" class="zoom-hover zoom-hover:hover card-img-top " alt="FaceSchool"/>
+              <div class="card-body">
+                  <h5 class="card-title" style="color :green">Créer une Classe Virtuelle</h5>
+                  <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{TotalClass}}</b></h3></center>
+                <p class="card-text">Un <b>Formateur</b> a la possibilité de créer une <b>classe Virtuelle</b> par rapport aux classes qu'il enseigne.</p>
+                <a href="{% url 'infoClasses' %}" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow ml-3 mr-3 mb-3 bloc-style-card" style="width: 18rem;">
+               <img src="{% static 'images/Accueil/groupeTravails.png' %}" class="zoom-hover zoom-hover:hover card-img-top" alt="FaceSchool"/>
+              <div class="card-body">
+                <h5 class="card-title" style="color :green">Créer un Groupe de Travail</h5>
+                   <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{TotalGrpTrav}}</b></h3></center>
+                <p class="card-text">Un <b>Formateur</b> a la possibilité de créer un <b>Groupe de Travail</b> avec les autres Formateurs.</p>
+                <a href="{% url 'infogroupeTravail' %}" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow ml-3 mr-3 mb-3 bloc-style-card" style="width: 18rem;">
+                <img src="{% static 'images/Accueil/inviteApprenant.png' %}" class="zoom-hover zoom-hover:hover card-img-top" alt="FaceSchool"/>
+              <div class="card-body">
+                <h5 class="card-title" style="color :green">Inviter des Apprenants</h5>
+                 <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{0}}</b></h3></center>
+                <p class="card-text">Un <b>Formateur</b> a la possibilité d'inviter' <b>un Apprenant</b> dans ses classes virtuelles.</p>
+                <a href="#" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+         <div class="col-lg-3">
+            <div class="card shadow ml-3 mr-3 mb-3 bloc-style-card" style="width: 18rem;">
+               <img src="{% static 'images/Accueil/CoursAdoms.png' %}" class="zoom-hover zoom-hover:hover card-img-top" alt="FaceSchool"/>
+              <div class="card-body">
+                <h5 class="card-title" style="color :green">Poster Cours à domicile</h5>
+                <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{0}}</b></h3></center>
+                <p class="card-text">Tout le monde peut faire la publicité de son Cours à domicile en les postant sur le site.</p>
+                <a href="#" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+    </div>
+<div class="row mb-2">
+        <div class="col-lg-3">
+            <div class="card shadow m-3 bloc-style-card" style="width: 18rem;">
+                <img src="{% static 'images/Accueil/groupeetude.png' %}" class="zoom-hover zoom-hover:hover card-img-top"  alt="FaceSchool"/>
+              <div class="card-body">
+                <h5 class="card-title" style="color :green">Créer un Groupe Etude </h5>
+                  <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{TotalGrpEtud}}</b></h3></center>
+                <p class="card-text">Un <b>Apprenant</b> a la possibilité de créer un <b>Groupe Etude</b> .</p>
+                <a href="{% url 'infogroupetude' %}" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow m-3 bloc-style-card" style="width: 18rem;">
+               <img src="{% static 'images/Accueil/document.png' %}" class="zoom-hover zoom-hover:hover card-img-top" alt="FaceSchool"/>
+              <div class="card-body">
+                <h5 class="card-title" style="color :green">Poster des Documents</h5>
+                  <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{TotalDocument}}</b></h3></center>
+                <p class="card-text"><b>Formateurs et Apprenants</b> ont la possibilité de deposer des <b>documents</b>.</p>
+                <a href="#" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow m-3 bloc-style-card" style="width: 18rem;">
+                <img src="{% static 'images/Accueil/partenaire.png' %}" class="zoom-hover zoom-hover:hover card-img-top" alt="FaceSchool"/>
+              <div class="card-body">
+                <h5 class="card-title" style="color :green">Faire des Partenariats</h5>
+                <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{Totalpartenariat}}</b></h3></center>
+                <p class="card-text">Des <b>Partenariats</b> peuvent être crées en <b>Classe et Groupe d'Etude</b>.</p>
+                <a href="#" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+         <div class="col-lg-3">
+            <div class="card shadow m-3 bloc-style-card" style="width: 18rem;">
+               <img src="{% static 'images/Accueil/exo.png' %}" class="zoom-hover zoom-hover:hover card-img-top" alt="FaceSchool"/>
+              <div class="card-body">
+                <h5 class="card-title" style="color :green">Poster des Exercices</h5>
+                   <center><h3 style="background-color: #ADD8E6"><b style="color:#B22222"> {{TotalExo}}</b></h3></center>
+                <p class="card-text"><b>Formateurs et Apprenants</b> ont la possibilité de deposer des <b>Exercices</b>.</p>
+                <a href="#" class="btn btn-primary">Savoir plus</a>
+              </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

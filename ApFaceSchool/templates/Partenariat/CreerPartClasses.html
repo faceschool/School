@@ -1,0 +1,234 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+
+
+<style>
+/* --- Style des cartes --- */
+.card-form {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-form:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* --- Champs actifs et focus --- */
+input:focus, select:focus {
+  outline: none;
+  border: 2px solid #0d6efd;
+  box-shadow: 0 0 10px rgba(13,110,253,0.4);
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+/* --- Champs en erreur --- */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+}
+.field-error {
+  animation: shake 0.4s ease;
+  border: 2px solid #dc3545 !important;
+  background-color: #ffe5e5;
+}
+
+/* --- Tableau modernisé --- */
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+}
+.table thead th {
+  background: linear-gradient(90deg, #0d6efd, #20c997);
+  color: white;
+}
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+.table tbody tr:hover {
+  background-color: rgba(13,110,253,0.08);
+  transform: scale(1.005);
+}
+
+/* --- Boutons centrés --- */
+.btn-center {
+  display: block;
+  width: 70%;
+  margin: 10px auto;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* --- Effet hover bouton --- */
+.btn-primary:hover, .btn-info:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(13,110,253,0.4);
+}
+.btn {
+  transition: all 0.3s ease;
+}
+
+/* --- Notification animée --- */
+.alert-animate {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 1050;
+  min-width: 320px;
+  transition: all 0.6s ease;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.alert-animate.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --- Animation apparition des cartes --- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card-form {
+  animation: fadeInUp 0.6s ease both;
+}
+</style>
+
+<div class="container-fluid">
+
+  <!-- ✅ Notification animée -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-animate" id="flash-message">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- ✅ Titre principal -->
+  <div class="m-3 text-center">
+    <button class="btn btn-info btn-center">
+      <b class="titre-principal text-uppercase">Création de partenariat entre classe</b>
+    </button>
+  </div>
+
+  <!-- ✅ Bloc supérieur -->
+  <div class="row justify-content-center mb-3">
+    <div class="col-md-3 col-sm-6 card-form text-center">
+      <img class="img-fluid rounded" src="https://www.win-france.org/win/wp-content/uploads/2018/07/iratech-partenariat.jpg" alt="Partenariat">
+    </div>
+
+    <div class="col-md-3 col-sm-6 card-form">
+      <p>
+        Chaque <b>formateur</b> peut signer autant de partenariats avec d'autres <b>classes</b> qu'il le souhaite.<br><br>
+        Ces <b>classes partenaires</b> peuvent accéder aux documents des classes de même <b>niveau</b>.<br><br>
+        Pour établir un <b>partenariat</b>, entrez simplement le <b>code d’invitation</b> fourni.
+      </p>
+    </div>
+
+    <!-- ✅ Formulaire de création -->
+    <div class="col-md-4 card-form">
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+          <label><b>Classe :</b></label>
+          <input type="text" name="NomClasse" class="form-control" value="{{ MClasse.NomClasse }}" readonly>
+        </div>
+
+        <div class="form-group mb-3">
+          <label><b>Niveau :</b></label>
+          <input type="text" class="form-control" value="{{ MClasse.Niveau }}" readonly>
+        </div>
+
+        <div class="form-group mb-3">
+          <label><b>Code partenaire :</b></label>
+          <input type="text" name="CodeAffect" class="form-control" placeholder="Entrez le code partenaire" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-center">
+          <i class="bi bi-link-45deg"></i> Signer le partenariat
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ✅ Tableau des partenariats -->
+  <div class="row justify-content-center">
+    <div class="col-md-8 card-form">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+          <thead>
+            <tr>
+              <th>Classe</th>
+              <th>Établissement</th>
+              <th>Documents</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for Listes in ListePartenariats %}
+              <tr>
+                <td>{{ Listes.ClassPartenaire.NomClasse }}</td>
+                <td>{{ Listes.ClassPartenaire.CodeEts }}</td>
+                <td>
+                  <a href="{% url 'ListeDocumentPart' Listes.ClassPartenaire_id %}">
+                    <img width="50" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid" alt="Documents"/>
+                  </a>
+                </td>
+                <td>
+                  <a class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce partenariat ?')" href="{% url 'SuppPartenariat' Listes.id %}">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="4" class="text-center">Aucun partenariat trouvé.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Script animation notification -->
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const flash = document.getElementById('flash-message');
+  if (flash) {
+    setTimeout(() => flash.classList.add('show'), 100);
+    setTimeout(() => {
+      flash.style.opacity = '0';
+      flash.style.transform = 'translateY(-20px)';
+      setTimeout(() => flash.remove(), 500);
+    }, 3500);
+  }
+});
+</script>
+
+
+
+
+
+{% endblock content %}

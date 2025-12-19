@@ -1,0 +1,105 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+<div class="container-fluid">
+    <div class="row m-3">
+        <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8 m-1 table-responsive shadow">
+        <center> ====<b> <label for="id_Nom" class="form-label">CLASSE :</label></b>
+              [ {{ nomclasse.NomClasse }} ]====</center>
+               <table class="table table-striped table-bordered m-1">
+                  <thead class="table-secondary">
+                    <tr>
+                      <th>#</th>
+                      <th>Discipline</th>
+                        <!--th>Niveau</th-->
+                      <th>Titre</th>
+                      <th>Type</th>
+                         <th>documents</th>
+                         <th>Modifier</th>
+                        <th>Supprimer</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for doc in DocClass %}
+                        <tr>
+                          <th scope="row">{{doc.id}}</th>
+                          <td>{{doc.Discipline}}</td>
+                            <!--td>{{doc.Niveau}}</td-->
+                             <td>{{doc.Titre}}</td>
+                          <td>{{doc.TypeDoc}}</td>
+                          <td>
+                            <a href="{{ doc.Document.url }}" download>Télécharger</a>
+                         </td>
+                         <td>
+                            <a href="{% url 'Modifier_document' doc.id %}">Modifier</a>
+                         </td>
+                           <td>
+                             <a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="{% url 'SupDocuments' doc.id %}"><img width="22%" src="{% static 'images/Logo/corbeille.png' %}" alt="FaceSchool"/></a>
+                          </td>
+
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+               </table>
+        </div>
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 m-3 shadow">
+            <div class="m-3"><center><button  class="btn btn-info "><b>AJOUTER UN DOCUMENT</b></button></center></div>
+            <hr>
+             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <hr>
+            <form method="POST" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+
+            {% csrf_token %}
+
+            <div class="mb-1">
+               {{ form.as_p }}
+            </div>
+
+             <div class="mb-1">
+              <b><label for="id_Prenom" class="form-label">Type Document :</label></b>
+                    <select class="form-control"  name="TypeDoc" id="formGroupExampleInput2">
+                           {% for type in TypeDoc %}
+                            <option value="{{type.TypeDoc}}">{{type.TypeDoc}}</option>
+                          {% endfor %}
+                    </select>
+            </div>
+
+             <div class="mb-1">
+              <b><label for="id_Nom" class="form-label">Titre :</label></b>
+              <input type="text" name="Titre" class="form-control" id="formGroupExampleInput2" placeholder="Titre du document" required>
+            </div>
+             <div class="mb-1">
+              <b><label for="id_Prenom" class="form-label">Observation :</label></b>
+                <textarea id="Observation" class="form-control" name="Observation" rows="4" cols="50" placeholder="Votre observation..." maxlength="500"></textarea>
+             </div>
+            <div class="mb-1">
+              <b><label for="id_Prenom" class="form-label">Etat :</label></b>
+              <p>
+                  <select class="form-control"  name="Etat" id="formGroupExampleInput2">
+                      <option value="PRIVE">PRIVE</option>
+                      <option value="PUBLIC">PUBLIC</option>
+                  </select>
+                </p>
+            </div>
+           <div class="mb-1">
+              <b><label for="id_Prenom" class="form-label">Document :</label></b>
+              <input type="file" class="form-control" placeholder="Votre document"   name="document" id="validationCustom11" required>
+           </div>
+
+            <center><button type="submit" class="btn btn-primary">Enregistrer</button></center>
+          </form>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock content %}

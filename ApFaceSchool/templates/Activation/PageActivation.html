@@ -1,0 +1,91 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+<h4 class="titre-principal m-3">Activation de Compte</h4>
+<div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <div class="row">
+         <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+
+         </div>
+
+         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 shadow" >
+                 {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+             <hr>
+               <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+
+                    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                        <label for="validationCustom01" class="form-label"><b>Votre Code d'activation:</b></label>
+                        <input type="text" class="form-control @error('CodeActive') is-invalid @enderror" id="CodeActive" name="CodeActive"    required>
+
+                    </div>
+                   <hr>
+                    <center><button class="btn btn-success m-2" type="submit">Soumettre</button></center>
+               </form>
+        </div>
+       <div class="col-12 col-md-10 mx-auto my-3">
+          {% if  activations %}
+                 <br>
+                <hr>
+                <h5 class="text-center text-primary mb-4"><b>LISTE DES CODES ACTIVATION</b></h5>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-success text-center">
+                      <tr>
+                        <th>Code</th>
+                        <th>Matricule</th>
+                        <th>Nom Prénom</th>
+                        <th>CodeActivation</th>
+                        <th>Delais</th>
+                        <th>Etat</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for etab in  activations %}
+                        <tr>
+                          <td class="text-center">{{ etab.id }}</td>
+                          <td>{{ etab.Matricule_id }}</td>
+                           <td>{{ etab.Matricule.Nom }} {{ etab.Matricule.Prenom  }}</td>
+                          <td>{{ etab.CodeActivation }}</td>
+                          <td>{{ etab.Delais }}</td>
+                         <td class="text-center">
+                            {% if etab.Etat  %}
+                              ✅
+                            {% else %}
+                              ❌
+                            {% endif %}
+                          </td>
+                          <td class="text-center">
+                             {% if Types == "Apprenant"  %}
+                               {% else %}
+                             <a href="{% url 'ModifierActivation' etab.id %}">Modifier</a>
+                               {% endif %}
+                          </td>
+                          <td class="text-center">
+                            <a href="{% url 'SupprimerActivation' etab.id %}">
+                              <img width="25" src="{% static 'images/Logo/corbeille.png' %}" alt="Supprimer">
+                            </a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              {% endif %}
+        </div>
+       </div>
+    </div>
+</div>
+
+
+{% endblock %}

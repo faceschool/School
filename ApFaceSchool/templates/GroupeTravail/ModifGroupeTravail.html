@@ -1,0 +1,152 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid my-3">
+    <h4 class="shadow-sm p-2 bg-primary text-white text-center rounded">
+        <b>VOTRE ESPACE GROUPE DE TRAVAIL</b>
+    </h4>
+    <hr>
+
+    <div class="row">
+        <!-- === Formulaire === -->
+        <div class="col-12 col-md-3 mb-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-danger text-white text-center">
+                    <b>Modification du Groupe N° [ {{ pk }} ]</b>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li><b>{{ field.label }}</b> : {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nom du Groupe (*)</label>
+                            {{ form.Groupe }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Responsable</label>
+                            {{ form.Responsable }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Contact</label>
+                            {{ form.Contact }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Discipline</label>
+                            {{ form.Discipline }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Code Affect</label>
+                            {{ form.CodeAffect }}
+                        </div>
+                        <div class="mb-3 text-center">
+                            <label class="form-label fw-bold">Logo</label><br>
+                            {% if form.instance.logo %}
+                                <img src="{{ form.instance.logo.url }}" alt="logo" width="60" class="rounded mb-2 border">
+                            {% endif %}
+                            {{ form.logo }}
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- === Tableau des groupes === -->
+        <div class="col-12 col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="{% url 'GroupeTrav' %}" class="btn btn-info text-white">
+                    <i class="bi bi-plus-circle"></i> Créer un Groupe
+                </a>
+            </div>
+
+            {% if Mesgroupes %}
+            <div class="table-responsive shadow-sm">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-success text-center">
+                        <tr>
+                            <th>Logo</th>
+                            <th>Groupe</th>
+                            <th>Discipline</th>
+                            <th>Responsable</th>
+                            <th>Contact</th>
+                            <th>Code</th>
+                            <th>Modifier</th>
+                            <th>Formateurs</th>
+                            <th>Documents</th>
+                            <th>Supprimer</th>
+                            <th>Partenariat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in Mesgroupes %}
+                        <tr>
+                            <td><img src="{{ group.logo.url }}" width="60" class="rounded shadow-sm"></td>
+                            <td>{{ group.Groupe }}</td>
+                            <td>{{ group.Discipline_id }}</td>
+                            <td>{{ group.Responsable }}</td>
+                            <td>{{ group.Contact }}</td>
+                            <td>{{ group.CodeAffect }}</td>
+                            <td class="text-center">
+                                <a href="{% url 'ModifGroupeTrav' group.id %}">
+                                    <img src="{% static 'images/Logo/modifier.png' %}" width="25">
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'AjouterFormGrpTrav' group.id %}">
+                                    <img src="{% static 'images/Logo/plus.png' %}" width="25">
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'Ajouter_dossiersGrpTrav' group.id %}">
+                                    <img src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" width="35">
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'SupGroupeTrav' group.id %}" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                                    <img src="{% static 'images/Logo/corbeille.png' %}" width="30">
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'CreerPartenariatGrpTrav' group.id %}">
+                                    <img src="https://www.egfbtp.com/wp-content/uploads/2021/06/partenariat.jpg" width="45">
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-warning text-center">
+                Aucun groupe de travail pour le moment.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

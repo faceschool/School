@@ -1,0 +1,14 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+<div class="container">
+	<div class="row m-5">
+		<div class="col-lg-3">
+		</div>
+		<div class="col-lg-8">
+			<h4 class="m-5 text-danger">Déconnexion réussie</h4>
+			<a href="{% url 'logout' %}"></a>
+		</div>
+	</div>
+</div>
+{% endblock %}

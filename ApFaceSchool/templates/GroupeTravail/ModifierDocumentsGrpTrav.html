@@ -1,0 +1,212 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+{% load custom_filters %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2 mb-2 shadow ">
+            <img src="{{nomgroupe.logo.url }}" alt="Photo" width="30%"><b style="color: red"> Groupe {{nomgroupe.Groupe}}</b>
+        </div>
+          <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
+          </div>
+
+         <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4 m-2 shadow ">
+           <center> <img  width="10%" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid"   alt="FaceSchool"/>
+               <b> <label  class="form-label" style="color: red">MES DOCUMENTS DE GROUPE DE TRAVAIL</label></b></center>
+
+         </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2 m-2 shadow">
+             <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                 {% if form.errors %}
+                  <ul>
+                    {% for field in form %}
+                      {% for error in field.errors %}
+                        <li>{{ field.label }} : {{ error }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                 <div>
+                     {% for error in form.non_field_errors %}
+                     <p>error</p>
+                     {% endfor %}
+                 </div>
+                 {% endif %}
+                 {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                        {% endfor %}
+                 {% endif%}
+                <div class="form-group">
+                     <center> <label for="id_Discipline" class="form-label bold-label btn btn-danger">N°Document:[ {{pk}} ]</label></center>
+                    <hr>
+
+                </div>
+                 <div class="form-group">
+                      <label for="id_Discipline">Discipline</label>
+                      {{ form.Discipline }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Niveau">Niveau</label>
+                  {{ form.Niveau }}
+                </div>
+
+                 <div class="form-group">
+                  <label for="id_Titre">Titre</label>
+                  {{ form.Titre }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_TypeDoc">Type de document</label>
+                  {{ form.TypeDoc }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Etat">État</label>
+                  {{ form.Etat }}
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Observation">Observation</label>
+                  {{ form.Observation }}
+                </div>
+
+
+                <div class="form-group">
+                  <label>Fichier actuel :</label><br>
+                  <a href="{{ DossiersGRPTrav.Document.url }}" target="_blank">Télécharger</a>
+                </div>
+
+                <div class="form-group">
+                  <label for="id_Document">Remplacer le fichier</label>
+                    {{form.Document}}
+
+                </div>
+
+                <center> <button type="submit" class="btn btn-primary m-3">Enregistrer</button></center>
+             </form>
+        </div>
+        <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8 mb-1 table-responsive">
+            <div class="card-footer text-center">
+                <a href="{% url 'Ajouter_dossiersGrpTrav' nomgroupe.id %}" class="btn btn-info text-white">
+                    ➕ Ajouter un Document
+                </a>
+            </div>
+            <div class="card shadow mt-3">
+            <div class="card-header bg-success text-white text-center fw-bold">
+                Liste des Documents du Groupe
+            </div>
+
+        <div class="card-body">
+
+            {% if ListeDossiers %}
+            <!-- 🖥️ TABLEAU (affiché sur écrans moyens et grands) -->
+                    <div class="table-responsive d-none d-md-block">
+                        <table class="table table-hover align-middle text-center">
+                            <thead class="table-success">
+                                <tr>
+                                    <th>Discipline</th>
+                                    <th>Niveau</th>
+                                    <th>Titre</th>
+                                    <th>Type</th>
+                                    <th>Documents</th>
+                                    <th>Modifier</th>
+                                    <th>Supprimer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for doc in ListeDossiers %}
+                                <tr>
+                                    <td>{{ doc.Discipline }}</td>
+                                    <td>{{ doc.Niveau }}</td>
+                                    <td>{{ doc.Titre }}</td>
+                                    <td>{{ doc.TypeDoc }}</td>
+                                    <td>
+                                        {% if doc.Document %}
+                                            <a href="{{ doc.Document.url }}" class="btn btn-outline-primary btn-sm" download>
+                                                Télécharger
+                                            </a>
+                                            <a href="{% url 'Transfert_documentGrpTrav' doc.id %}" class="btn btn-outline-secondary btn-sm">
+                                                Transférer
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted">Aucun fichier</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'Modifier_DossiersGrpTrav' doc.id %}" class="btn btn-warning btn-sm">
+                                            Modifier
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'Supp_DossiersGrpTrav' doc.id %}"
+                                           class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Voulez-vous vraiment supprimer ce document ?');">
+                                           <img width="18" src="{% static 'images/Logo/corbeille.png' %}" alt="Supprimer">
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+            <!-- 📱 VERSION MOBILE (affiché uniquement sur petits écrans) -->
+            <div class="d-md-none">
+                {% for doc in ListeDossiers %}
+                <div class="card mb-3 shadow-sm border-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-success fw-bold">{{ doc.Titre }}</h5>
+                        <p class="card-text mb-1"><b>Discipline :</b> {{ doc.Discipline }}</p>
+                        <p class="card-text mb-1"><b>Niveau :</b> {{ doc.Niveau }}</p>
+                        <p class="card-text mb-1"><b>Type :</b> {{ doc.TypeDoc }}</p>
+
+                        {% if doc.Document %}
+                            <div class="mt-2">
+                                <a href="{{ doc.Document.url }}" class="btn btn-outline-primary btn-sm w-100 mb-1" download>
+                                    📥 Télécharger
+                                </a>
+                                <a href="{% url 'Transfert_documentGrpTrav' doc.id %}" class="btn btn-outline-secondary btn-sm w-100">
+                                    🔁 Transférer
+                                </a>
+                            </div>
+                        {% else %}
+                            <span class="text-muted">Aucun fichier joint</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{% url 'Modifier_DossiersGrpTrav' doc.id %}" class="btn btn-warning btn-sm w-50 me-1">
+                            ✏️ Modifier
+                        </a>
+                        <a href="{% url 'Supp_DossiersGrpTrav' doc.id %}"
+                           class="btn btn-danger btn-sm w-50 ms-1"
+                           onclick="return confirm('Voulez-vous vraiment supprimer ce document ?');">
+                            🗑️ Supprimer
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+
+        {% else %}
+            <p class="text-center text-muted">Aucun document trouvé pour ce groupe.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,152 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+<div class="container">
+            <div class="row justify-content-center m-3">
+
+                <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                            <div class="card text-bg-success mb-3 shadow">
+                                <div class="card-header fond"><center><b>MODIFIEZ VOTRE PROFIL</b></center></div>
+                                <div class="card-body fonds">
+                                    <p class="card-text">
+                                          L'inscription des formateurs est gratuite,mais tout formateur qui s'inscrit et qui demeure sans activité pendant
+                                        3 mois sera supprimé automatiquement.
+
+                                         <center>
+
+                                             <button class="btn btn-success "><a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="">Supprimer un compte erroné</a> </button>
+
+                                        </center>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card text-bg-success mb-3 shadow">
+
+                        <div class="card-body">
+                            <div class="card-header fond"><center>MODIFIEZ VOTRE PROFIL </center>
+
+                            </div>
+                            <p class="card-text">
+
+                            <form method="POST" class="row g-3 needs-validation" enctype="multipart/form-data" >
+                                     {% csrf_token %}
+                                     {% if request.user.is_authenticated %}
+                                     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="validationCustom01" class="form-label">User ID(*)</label>
+                                        <input type="text" class="form-control @error('username_id') is-invalid @enderror" id="username_id" name="username_id" value="{{ request.user.id }} "   readonly required>
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="validationCustom01" class="form-label">Login(*)</label>
+                                        <input type="text" class="form-control @error('LoginAp') is-invalid @enderror" id="LoginAp" name="LoginAp" value="{{user}}"   readonly required>
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="email" class="form-label">E-mail(*)</label>
+                                        <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ request.user.Email }}" placeholder="Exemple: nom@societe.com" readonly required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="MatriculeForm " class="form-label">Matricule(*)</label>
+                                        <input type="text" class="form-control @error('MatriculeForm ') is-invalid @enderror" maxlength="15" id="MatriculeForm " name="MatriculeForm " value="{{forma.Matricule }}" readonly>
+
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="nomAp" class="form-label">Nom(*)</label>
+                                        <input type="text" class="form-control @error('nomForm') is-invalid @enderror" id="nomForm" name="nomForm" maxlength="15"  value="{{forma.Nom}}">
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="prenomForm" class="form-label">Prénom(*)</label>
+                                        <input type="text" class="form-control @error('prenomForm') is-invalid @enderror" id="prenomForm" name="prenomForm" maxlength="30"  value="{{forma.Prenom}}" required>
+
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="DateNaissance" class="form-label">Date Naissance(*)</label>
+                                        <input type="date" class="form-control datepicker @error('DateNaissance') is-invalid @enderror" id="DateNaissance" name="DateNaissance" value="{{forma.DateNaissance}}" required>
+
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="TelForm" class="form-label">Téléphone(*)</label>
+                                        <input type="tel" partten="[0-9]{10}" class="form-control @error('TelForm') is-invalid @enderror" id="TelForm" name="TelForm"  value="{{forma.Tel}}">
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label for="Pays" class="form-label">Pays(*)</label>
+                                        <input type="text" class="form-control @error('Pays') is-invalid @enderror" id="Pays" name="Pays" value="{{forma.Pays}}"   required>
+
+                                    </div>
+                                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                         <label for="validationCustom10" class="form-label">Type(*)</label>
+                                        <select class="form-select" name="Type" id="validationCustom10" required>
+                                            <option selected  value="{{forma.Type}}">{{forma.Type}}</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a valid Type.
+                                        </div>
+                                         </div>
+                                    </div>
+                                   <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <label  class="form-label">Sexe</label>
+                                         <select class="form-select" name="Sexe" id="validationCustom09" required>
+                                            <option value="{{forma.Sexe}}">{{forma.Sexe}}</option>
+                                            <option>F</option>
+                                         </select>
+                                         </div>
+                                    </div>
+                                     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                                         <label for="validationCustom10" class="form-label">Discipline(*)</label>
+                                            <select class="form-select" name="Discipline" id="Discipline"   required>
+                                                    <option value="{{forma.Discipline}}" selected>{{forma.Discipline}}</option>
+                                            </select>
+                                         </div>
+                                    </div>
+
+
+                                         <div class="col-md-8 col-xs-8 col-sm-8 col-lg-12">
+                                             <br><br>
+                                        <label for="validationCustom11" class="form-label">Votre Photo : {{forma.Photo}}</label>
+                                          <input type="text" class="form-control @error('image') is-invalid @enderror" value="{{forma.Photo}}" id="image" name="image" hidden>
+                                        <input type="file" class="form-control" value="{{forma.Photo}}"  name="photo" id="validationCustom11">
+                                        <b class="btn btn-danger">Format image : jpg,png,jpeg Taille maxi:300 KO</b>
+
+                                    </div>
+
+                                    <div class="col-12 m-3">
+                                       <center> <button class="btn btn-primary btn-md" type="submit">Modifier</button></center>
+                                        (*)-Obligatoire
+                                    </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+<script>
+
+</script>
+
+{% endblock content %}

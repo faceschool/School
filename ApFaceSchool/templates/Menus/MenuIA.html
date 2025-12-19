@@ -1,0 +1,173 @@
+{% load static %}
+{% load custom_filters %}
+
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Votre Espace Face School</title>
+
+  <!-- Bootstrap (version unique 5.3) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="bg-white">
+
+  <!-- Header -->
+  <header class="bg-dark text-white py-2">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <div>
+        <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">Login</a>
+        <a class="btn btn-light btn-sm" href="{% url 'register' %}">Register</a>
+      </div>
+
+      <div class="d-flex gap-2">
+        <a href="#"><i class="fab fa-facebook-f text-white"></i></a>
+        <a href="#"><i class="fab fa-x-twitter text-white"></i></a>
+        <a href="#"><i class="fab fa-instagram text-white"></i></a>
+        <a href="#"><i class="fab fa-youtube text-white"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in text-white"></i></a>
+        <a href="#"><i class="fab fa-discord text-white"></i></a>
+        <a href="#"><i class="fas fa-rss text-white"></i></a>
+        <a href="#"><i class="fab fa-tiktok text-white"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation principale -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-primary shadow">
+    <div class="container">
+      <a class="navbar-brand text-white fw-bold" href="/">
+        <img src="{% static 'images/Logo/FS.png' %}" alt="Logo" height="40">
+        FaceSchool
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link text-white" href="/">Accueil</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'presentation' %}">Présentation</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'contacts' %}">Contact</a></li>
+        </ul>
+
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'AffProfil' request.user.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-warning btn-sm">Mon Profil: <b>[{{ Types }}]</b></button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Carrousel -->
+  <section id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'images/logo/FSApprenants4.png' %}" class="d-block w-100" alt="FaceSchool">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/logo/FS5.png' %}" class="d-block w-100" alt="FaceSchool">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/logo/FS6.png' %}" class="d-block w-100" alt="FaceSchool">
+      </div>
+    </div>
+  </section>
+
+  <!-- Sous-navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-primary shadow mt-3">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#subNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="subNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'infoFormateur' %}">Formateurs</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'infoApprenant' %}">Apprenants</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'infoClasses' %}">Classes</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'infogroupetude' %}">Groupes Étude</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'infogroupeTravail' %}">Groupes Travail</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'monespace' %}">Mon Espace</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'forum' %}">Forum</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="formationDropdown" role="button" data-bs-toggle="dropdown">
+              Formation
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'CreerEtablissement' %}">Centre de Formation</a></li>
+              <li><a class="dropdown-item" href="{% url 'Creercoursdom' %}">Cours à Domicile</a></li>
+              <li><a class="dropdown-item" href="{% url 'CreerPublicite' %}">Créer une Publicité</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        {% if user.is_authenticated %}
+        <span class="text-white ms-3">[ {{ user }} ]</span>
+        <form method="post" action="{% url 'logout' %}" class="ms-2">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light btn-sm">Déconnexion</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-success btn-sm ms-3">Connexion</a>
+        <a href="{% url 'register' %}" class="btn btn-info btn-sm ms-2">S’inscrire</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <main class="container mt-4">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Pied de page -->
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <p class="mb-1">© Développé par <strong>ONG IPT</strong></p>
+    <p>
+      <i class="fa-solid fa-phone"></i> +225 07 07 42 02 42 |
+      <i class="fa-solid fa-envelope"></i> contact@faceschool.org |
+      <i class="fa-solid fa-globe"></i> www.faceschool.org
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 mb-2">
+      <a href="https://facebook.com" class="text-white"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://x.com" class="text-white"><i class="fab fa-x-twitter"></i></a>
+      <a href="https://instagram.com" class="text-white"><i class="fab fa-instagram"></i></a>
+      <a href="https://youtube.com" class="text-white"><i class="fab fa-youtube"></i></a>
+      <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+
+    <div>
+      <a href="/" class="text-white me-2"><i class="fa-solid fa-house"></i> Accueil</a>
+      <a href="{% url 'infoFormateur' %}" class="text-white me-2"><i class="fa-solid fa-chalkboard-user"></i> Formateur</a>
+      <a href="{% url 'infoApprenant' %}" class="text-white me-2"><i class="fa-solid fa-user-graduate"></i> Apprenant</a>
+      <a href="{% url 'contacts' %}" class="text-white"><i class="fa-solid fa-envelope"></i> Contact</a>
+    </div>
+  </footer>
+
+  <!-- Script rotation pubs -->
+  <script>
+    const pubs = document.querySelectorAll('#pub-container .pub');
+    let index = 0;
+    setInterval(() => {
+      pubs.forEach(p => p.style.display = 'none');
+      pubs[index].style.display = 'block';
+      index = (index + 1) % pubs.length;
+    }, 5000);
+  </script>
+</body>
+</html>

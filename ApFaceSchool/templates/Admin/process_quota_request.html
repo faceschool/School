@@ -1,0 +1,54 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+<div class="container mt-4">
+   {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" style="color: red">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+<h3>Traiter la demande #{{ qr.id }}</h3>
+
+<div class="card mb-3">
+<div class="card-body">
+<h5 class="card-title">Utilisateur: {{ qr.user.get_full_name|default:qr.user.username }}</h5>
+<p class="card-text">Demandé : <strong>{{ qr.requested_gb }} Go</strong></p>
+<p class="card-text">Prix : <strong>{{ qr.price }}</strong></p>
+<p class="card-text">Statut actuel : <strong>{{ qr.status }}</strong></p>
+<p class="card-text">Statut paiement : <strong>{{ qr.payment_status }}</strong></p>
+<p class="card-text"><small class="text-muted">Créé le {{ qr.created_at|date:"Y-m-d H:i" }}</small></p>
+</div>
+</div>
+
+
+<form method="post" action="">
+{% csrf_token %}
+<div class="mb-3">
+<label for="admin_note" class="form-label">Note admin (optionnelle)</label>
+<textarea name="note" id="admin_note" class="form-control" rows="3">{{ qr.admin_note }}</textarea>
+</div>
+
+
+<div class="d-flex gap-2">
+<button type="submit" name="action" value="approve" class="btn btn-success">Approuver & appliquer</button>
+<button type="submit" name="action" value="reject" class="btn btn-danger">Refuser</button>
+<a href="{% url 'admin_list_requests' %}" class="btn btn-secondary">Retour</a>
+</div>
+</form>
+
+
+{% if qr.payment_status == qr.PAYMENT_PENDING or qr.payment_status == qr.PAYMENT_NONE %}
+<div class="mt-4">
+<h6>Actions de paiement</h6>
+<p class="text-muted">Si le paiement est en attente, tu peux marquer la demande comme payée manuellement (utile pour tests).</p>
+<form method="post" action="" class="d-inline-block">
+{% csrf_token %}
+<button type="submit" name="action" value="mark_paid" class="btn btn-outline-primary">Marquer comme payé</button>
+</form>
+</div>
+{% endif %}
+
+
+</div>
+{% endblock %}

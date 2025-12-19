@@ -1,0 +1,162 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+
+            <!-- Card principale -->
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 style="color:white"><i class="bi bi-person-circle"></i> Complétez Votre Profil</h3>
+                </div>
+
+                <div class="card-body">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} shadow-sm" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <p class="text-muted small">
+                        L'inscription des Apprenants se fait en une seule fois. Tout Apprenant qui demeure sans activité pendant 3 mois sera supprimé automatiquement.
+                    </p>
+
+                    <form method="post" enctype="multipart/form-data" class="row g-4 needs-validation" action="{% url 'ajouter_ProfilFormateur' %}" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Informations de compte -->
+                        {% if request.user.is_authenticated %}
+                            <div class="col-12">
+                                <div class="card border-info mb-3">
+                                    <div class="card-header bg-info text-white">
+                                        <i class="bi bi-person-badge"></i> Informations du Compte
+                                    </div>
+                                    <div class="card-body row g-3">
+                                        <div class="col-md-4">
+                                            <label for="username_id" class="form-label">User ID(*)</label>
+                                            <input type="text" class="form-control" id="username_id" name="username_id" value="{{ request.user.id }}" readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="LoginAp" class="form-label">Login(*)</label>
+                                            <input type="text" class="form-control" id="LoginAp" name="LoginForm" value="{{ user }}" readonly required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="email" class="form-label">E-mail(*)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" readonly required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Informations personnelles -->
+                        <div class="col-12">
+                            <div class="card border-success mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <i class="bi bi-card-text"></i> Informations Personnelles
+                                </div>
+                                <div class="card-body row g-3">
+                                    <div class="col-md-4">
+                                        <label for="MatriculeAp" class="form-label">Matricule(*)</label>
+                                        <input type="text" class="form-control" id="MatriculeAp" name="MatriculeForm" maxlength="15" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="nomAp" class="form-label">Nom(*)</label>
+                                        <input type="text" class="form-control" id="nomForm" name="nomForm" maxlength="30" placeholder="Ex: Berté" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="prenomAp" class="form-label">Prénom(*)</label>
+                                        <input type="text" class="form-control" id="prenomForm" name="prenomForm" maxlength="30" placeholder="Ex: Ettien" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="DateNaissance" class="form-label">Date de Naissance(*)</label>
+                                        <input type="date" class="form-control" id="DateNaissance" name="DateNaissance" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="TelAp" class="form-label">Téléphone(*)</label>
+                                        <input type="tel" class="form-control" id="TelForm" name="TelForm" pattern="[0-9]{10}" placeholder="Ex: 0707420242" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Pays" class="form-label">Pays(*)</label>
+                                        <input type="text" class="form-control" id="Pays" name="Pays" value="Côte d'Ivoire" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations académiques -->
+                        <div class="col-12">
+                            <div class="card border-warning mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <i class="bi bi-book"></i> Informations Académiques
+                                </div>
+                                <div class="card-body row g-3">
+                                    <div class="col-md-4">
+                                        <label for="Type" class="form-label">Type(*)</label>
+                                        <select class="form-select" name="Type" id="Type" required>
+                                            <option value="Formateur" selected>Formateur</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Sexe" class="form-label">Sexe(*)</label>
+                                        <select class="form-select" name="Sexe" id="Sexe" required>
+                                            <option value="M" selected>Masculin</option>
+                                            <option value="F">Féminin</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Niveau" class="form-label">Discipline(*)</label>
+                                        <select class="form-select" name="discipline" id="discipline" required>
+                                            {% for dis in disc %}
+                                                <option value="{{ niv.niveau }}">{{ dis.discipline }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="CodeEts" class="form-label">Pays</label>
+                                        <input type="text" class="form-control" id="Pays" name="Pays" value="KTS" required>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label for="photo" class="form-label">Votre Photo</label>
+                                        <input type="file" class="form-control" id="photo" name="photo" accept=".jpg,.jpeg,.png">
+                                        <small class="text-danger">Format image: jpg, png, jpeg. Taille max: 300 Ko.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bouton Soumettre -->
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle"></i> Soumettre
+                            </button>
+                            <p class="mt-2 text-muted">(*)-Obligatoire</p>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+  (document).ready(function()('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'fr',
+        autoclose: true,
+        todayHighlight: true
+    });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/locales/bootstrap-datepicker.fr.min.js"></script>
+
+{% endblock content %}

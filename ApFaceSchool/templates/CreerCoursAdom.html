@@ -1,0 +1,74 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+<h4 class="titre-principal m-3">Cours à Domicile</h4>
+<div class="row">
+     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+       <img width="100%" src="{% static 'images/Page/cours-soutien.jpg' %}"  alt="Cours à Domicile 1">
+     </div>
+
+     <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 shadow" >
+         {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+       <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.as_p }}
+           <hr>
+       <center><button class="btn btn-success m-2" type="submit">Valider</button></center>
+    </form>
+    </div>
+    <div class="col-md-12">
+          {% if coursDom %}
+                <br>
+              <hr>
+            <h5 class="text-center text-primary mb-4"><b>LISTE DES COURS À DOMICILE</b></h5>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-primary">
+                  <tr>
+                    <th>Code</th>
+                    <th>Logo</th>
+                    <th>Titre</th>
+                    <th>Discipline</th>
+                    <th>Description</th>
+                    <th>Actif</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for etab in coursDom %}
+                    <tr>
+                      <td>{{ etab.id }}</td>
+                      <td><img src="{{ etab.image.url }}" alt="Logo" style="width: 60px; height: auto;"></td>
+                      <td>{{ etab.titre }}</td>
+                      <td>{{ etab.Discipline_id }}</td>
+                      <td>{{ etab.description|truncatewords:15 }}</td>
+                      <td>{{ etab.actif }}</td>
+                      <td>
+                        <a href="{% url 'ModifierDom' etab.id %}">
+                          <img width="24" src="{% static 'images/Logo/modifier.png' %}" alt="Modifier">
+                        </a>
+                  </td>
+                      <td>
+                        <a href="{% url 'SupprimerDom' etab.id %}">
+                          <img width="24" src="{% static 'images/Logo/corbeille.png' %}" alt="Supprimer">
+                        </a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+    </div>
+
+</div>
+
+
+{% endblock %}

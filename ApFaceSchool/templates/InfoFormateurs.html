@@ -1,0 +1,82 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+/* Effet hover pour les cartes */
+.hover-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.hover-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+</style>
+
+<div class="container my-4">
+
+  <!-- Header Formateur -->
+  <div class="text-center mb-4">
+    <img src="{% static 'images/Page/formateur.jpg' %}" width="8%" alt="Formateur" class="mb-2">
+    <h3 class="text-danger fw-bold">Un Formateur</h3>
+    <hr>
+    <button type="button" class="btn btn-primary btn-md"><b>QUI EST FORMATEUR ?</b></button>
+    <hr>
+  </div>
+
+  <!-- Section descriptif avec effet hover -->
+  <div class="row g-4">
+
+    <!-- Colonne 1 : Qui est le formateur -->
+    <div class="col-lg-6 col-md-12">
+      <div class="p-4 bg-light rounded shadow-sm hover-card h-100">
+        <h5 class="fw-bold">Un Formateur :</h5>
+        <hr>
+        <p>
+          Personne chargée de former de futurs professionnels ; spécialiste des actions de formation.
+          Les formateurs ont pour mission première d'accompagner des apprenants dans la validation d'une formation professionnelle ou scolaire.
+          FaceSchool sera un outil d'aide et de facilitation à la formation. Le formateur, en utilisant notre plateforme, gagne du temps.
+        </p>
+        <p><b>Un Formateur peut être :</b></p>
+        <ul>
+          <li><b>Un Professeur</b></li>
+          <li><b>Un Enseignant</b></li>
+          <li><b>Un Travailleur</b></li>
+        </ul>
+        {% if Types == "Formateur" %}
+        <div class="mt-3 text-center">
+          <a href="{% url 'register' %}" class="btn btn-secondary">Créer son Espace Formateur</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Colonne 2 : Que peut faire le Formateur -->
+    <div class="col-lg-6 col-md-12">
+      <div class="p-4 bg-light rounded shadow-sm hover-card h-100">
+        <h5 class="fw-bold">Que peut faire le Formateur ?</h5>
+        <hr>
+        <p>Il peut :</p>
+        <ul>
+          <li><b>Créer une Classe virtuelle</b></li>
+          <li><b>Créer un Groupe de Travail entre professeurs</b></li>
+          <li><b>Créer un Partenariat entre Classes</b></li>
+          <li><b>Créer un Partenariat entre Groupes de Travail</b></li>
+          <li><b>Créer des Cours en ligne</b></li>
+        </ul>
+        <img src="{% static 'images/Page/Formateurs.jpg' %}" class="img-fluid rounded mt-3" alt="Actions Formateur">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Animation bas -->
+  <div class="text-center my-5">
+    <img src="{% static 'images/Accueil/gauche.gif' %}" alt="Left" class="me-2">
+    <b class="text-danger fs-5">AVEC FACESCHOOL</b>
+    <img src="{% static 'images/Accueil/droite.gif' %}" alt="Right" class="ms-2">
+  </div>
+
+</div>
+
+{% endblock content %}

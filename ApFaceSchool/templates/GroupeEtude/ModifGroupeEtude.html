@@ -1,0 +1,197 @@
+{% extends "Menus/MenuEspaceApp.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid py-3">
+
+    <!-- 🔵 TITRE -->
+    <h4 class="shadow p-2 rounded bg-primary text-white w-fit"><b>VOTRE ESPACE GROUPE D'ÉTUDE</b></h4>
+    <hr>
+
+    <div class="row">
+
+        <!-- 🟦 FORMULAIRE DE CRÉATION / MODIFICATION -->
+        <div class="col-md-3 shadow p-3 rounded bg-light">
+
+            <form method="post" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <!-- ⚠️ ERREURS DU FORMULAIRE -->
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><strong>{{ field.label }} :</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- ⚠️ ERREURS NON LIÉES À UN CHAMP -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- 🔔 MESSAGES DJANGO -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow-sm">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- 🟩 TITRE DU FORMULAIRE -->
+                <div class="text-center">
+                    <label class="btn btn-danger w-100 my-2">
+                        <b>Groupe N° : [ {{ pk }} ]</b>
+                    </label>
+                </div>
+
+                <hr>
+
+                <!-- 📝 CHAMPS DU FORMULAIRE -->
+                <div class="mb-2">
+                    <label class="form-label"><b>Nom Groupe *</b></label>
+                    {{ form.Groupe }}
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label"><b>Responsable</b></label>
+                    {{ form.Responsable }}
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label"><b>Contact</b></label>
+                    {{ form.Contact }}
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label"><b>Niveau</b></label>
+                    {{ form.Niveau }}
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label"><b>Etablissement</b></label>
+                    {{ form.Etablissement }}
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label"><b>Code Affect</b></label>
+                    {{ form.CodeAffect }}
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label"><b>Logo</b></label><br>
+                    <img src="{% static 'images/Logo/plus.png' %}" width="20%" class="img-thumbnail mb-1">
+                    {{ form.logo }}
+                </div>
+
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary px-4">Enregistrer</button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- 🟩 TABLEAU DES GROUPES -->
+        <div class="col-md-8">
+
+            <div class="mb-2">
+                <a class="btn btn-info text-white" href="{% url 'groupetude' %}">
+                    Créer un Groupe d'Étude
+                </a>
+            </div>
+
+            <hr>
+
+            {% if Mesgroupes %}
+            <div class="table-responsive shadow-sm">
+                <table class="table table-striped table-bordered align-middle">
+
+                    <thead class="table-success text-center">
+                        <tr>
+                            <th>#</th>
+                            <th>Logo</th>
+                            <th>Groupe</th>
+                            <th>Niveau</th>
+                            <th>Etablissement</th>
+                            <th>Responsable</th>
+                            <th>Contact</th>
+                            <th>Code Invité</th>
+                            <th>Modifier</th>
+                            <th>Apprenant</th>
+                            <th>Documents</th>
+                            <th>Supprimer</th>
+                            <th>Partenariat</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for group in Mesgroupes %}
+                        <tr class="text-center">
+
+                            <td>{{ group.id }}</td>
+
+                            <td>
+                                <img src="{{ group.logo.url }}" width="70" class="img-fluid rounded shadow-sm">
+                            </td>
+
+                            <td>{{ group.Groupe }}</td>
+                            <td>{{ group.Niveau_id }}</td>
+                            <td>{{ group.Etablissement }}</td>
+                            <td>{{ group.Responsable }}</td>
+                            <td>{{ group.Contact }}</td>
+                            <td>{{ group.CodeAffect }}</td>
+
+                            <td>
+                                <a href="{% url 'ModifGroupeEtude' group.id %}">
+                                    <img src="{% static 'images/Logo/modifier.png' %}" width="35">
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="{% url 'AjouterApprenGrpEtude' group.id %}">
+                                    <img src="{% static 'images/Logo/plus.png' %}" width="35">
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="{% url 'Ajouter_dossiersGrpEtude' group.id %}">
+                                    <img width="45" class="img-fluid"
+                                         src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg">
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="{% url 'SupGroupeEtude' group.id %}"
+                                   onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                                    <img src="{% static 'images/Logo/corbeille.png' %}" width="30">
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="{% url 'CreerPartenariatGrpEtude' group.id %}">
+                                    <img width="50" class="rounded"
+                                         src="https://www.egfbtp.com/wp-content/uploads/2021/06/partenariat.jpg">
+                                </a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

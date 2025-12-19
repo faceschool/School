@@ -1,0 +1,250 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+  <!-- Bootstrap CSS (CDN) -->
+  <style>
+    .shadow-card { border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+    .table thead th { vertical-align: middle; }
+  </style>
+</head>
+<body>
+
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col-lg-8 col-md-9 col-sm-9 m-1 table-responsive shadow-card p-3 bg-white">
+
+      <!-- Titre -->
+      <div class="text-center mb-3">
+        <label class="form-label fw-bold">CLASSE :</label>
+        <span class="text-danger fw-bold mx-2">[ {{ nomclasse.NomClasse }} ]</span>
+      </div>
+
+      <!-- FILTRES / RECHERCHE -->
+      <form class="row g-2 mb-3" method="get">
+        <div class="col-auto">
+          <input type="text" name="q" class="form-control form-control-sm" placeholder="Recherche (titre/discipline)"
+                 value="{{ q }}">
+        </div>
+
+        <div class="col-auto">
+          <select name="discipline" class="form-select form-select-sm">
+            <option value="">Toutes disciplines</option>
+            {% for d in disciplines %}
+              <option value="{{ d }}" {% if discipline_selected == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-auto">
+          <select name="typedoc" class="form-select form-select-sm">
+            <option value="">Tous types</option>
+            {% for t in typedocs %}
+              <option value="{{ t }}" {% if typedoc_selected == t %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-auto">
+          <select name="per_page" class="form-select form-select-sm">
+            <option value="8" {% if page_obj.paginator.per_page|stringformat:"s" == "8" %}selected{% endif %}>8</option>
+            <option value="12" {% if page_obj.paginator.per_page|stringformat:"s" == "12" %}selected{% endif %}>12</option>
+            <option value="25" {% if page_obj.paginator.per_page|stringformat:"s" == "25" %}selected{% endif %}>25</option>
+          </select>
+        </div>
+
+        <div class="col-auto">
+          <button type="submit" class="btn btn-sm btn-primary">Filtrer</button>
+          <a href="{% url 'Ajouter_document' classe_id %}" class="btn btn-sm btn-outline-secondary">Réinitialiser</a>
+        </div>
+      </form>
+
+      <!-- TABLE (utilisée par Django ou DataTables) -->
+      <table id="docsTable" class="table table-striped table-bordered nowrap" style="width:100%">
+        <thead class="table-success text-center">
+          <tr>
+            <th data-data="Discipline">Discipline</th>
+            <th data-data="Titre">Titre</th>
+            <th data-data="TypeDoc">Type</th>
+            <th data-data="Document">Documents</th>
+            <th>Solution</th>
+            <th>Modifier</th>
+            <th>Supprimer</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% comment %} Si tu utilises DataTables server-side, tbody peut être vide. {% endcomment %}
+          {% for doc in page_obj %}
+          <tr>
+            <td class="fw-semibold">{{ doc.Discipline }}</td>
+            <td>{{ doc.Titre }}</td>
+            <td><span class="badge bg-info text-dark">{{ doc.TypeDoc }} — N°{{ doc.id }}</span></td>
+            <td class="text-center">
+              {% if doc.Document %}
+                <a href="{{ doc.Document.url }}" download class="btn btn-sm btn-outline-primary">Télécharger</a>
+              {% else %}
+                <span class="text-muted small">Aucun</span>
+              {% endif %}
+            </td>
+            <td class="text-center">
+              {% if doc.TypeDoc != "Cours" %}
+                <a href="{% url 'Ajouter_Solution' doc.id %}">
+                  <img src="{% static 'images/Logo/plus.png' %}" width="26" alt="Ajouter">
+                </a>
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+            <td class="text-center">
+              <a href="{% url 'Modifier_document' doc.id %}" class="btn btn-sm btn-outline-success">Modifier</a>
+            </td>
+            <td class="text-center">
+              <a href="{% url 'SupDocuments' doc.id %}" onclick="return confirm('Voulez-vous vraiment supprimer ?')" class="btn btn-sm btn-outline-danger">
+                <img src="{% static 'images/Logo/corbeille.png' %}" width="20" alt="Supprimer">
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Pagination Django -->
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ q }}&discipline={{ discipline_selected }}&typedoc={{ typedoc_selected }}">&laquo;</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item"><a class="page-link" href="?page={{ num }}&q={{ q }}&discipline={{ discipline_selected }}&typedoc={{ typedoc_selected }}">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ q }}&discipline={{ discipline_selected }}&typedoc={{ typedoc_selected }}">&raquo;</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+
+    </div>
+    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 m-3 shadow">
+            <div class="m-3"><center><button  class="btn btn-info "><b>AJOUTER UN DOCUMENT</b></button></center></div>
+            <hr>
+             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <hr>
+            <form method="POST" enctype="multipart/form-data" class="p-4 shadow rounded bg-light">
+
+            {% csrf_token %}
+
+            <div class="mb-1">
+               {{ form.as_p }}
+            </div>
+
+
+
+            <center><button type="submit" class="btn btn-primary">Enregistrer</button></center>
+          </form>
+        </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script>
+  (function() {
+    // Choix: mode serverSide toggle
+    const serverSide = false; // <- passe à true pour mode server-side (utile si grandes tables)
+
+    const table = $('#docsTable');
+
+    if (!serverSide) {
+      // Mode client-side : DataTables sur le HTML actuel (utile si dataset petit)
+      table.DataTable({
+        responsive: true,
+        pageLength: 10,
+        ordering: true,
+        columnDefs: [
+          { orderable: false, targets: [3,4,5,6] } // colonnes actions non triables
+        ],
+        // activation de la recherche instantanée
+      });
+    } else {
+      // Mode server-side (AJAX). L'endpoint doit retourner le JSON de la forme DataTables.
+      table.DataTable({
+        serverSide: true,
+        processing: true,
+        responsive: true,
+        ajax: {
+          url: "{% url 'doc_list_data' nomclasse.id %}",
+          type: "GET",
+          // si tu utilises POST -> ajouter headers CSRF
+        },
+        columns: [
+          { data: 'Discipline' },
+          { data: 'Titre' },
+          { data: 'TypeDoc' },
+          {
+            data: 'Document',
+            orderable: false,
+            render: function (data, type, row) {
+              if (data) {
+                return '<a href="'+data+'" download class="btn btn-sm btn-outline-primary">Télécharger</a>';
+              }
+              return '<span class="text-muted small">Aucun</span>';
+            }
+          },
+          {
+            data: 'id',
+            orderable: false,
+            render: function(data, type, row){
+              // bouton ajouter solution si type != Cours
+              if (!row.TypeDoc.startsWith('Cours')){
+                return '<a href="/ajouter_solution/'+data+'"><img src="{% static 'images/Logo/plus.png' %}" width="26" /></a>';
+              }
+              return '—';
+            }
+          },
+          {
+            data: 'id',
+            orderable: false,
+            render: function(data){
+              return '<a class="btn btn-sm btn-outline-success" href="/modifier_document/'+data+'">Modifier</a>';
+            }
+          },
+          {
+            data: 'id',
+            orderable: false,
+            render: function(data){
+              return '<a class="btn btn-sm btn-outline-danger" onclick="return confirm(\\'Voulez-vous vraiment supprimer ?\\')" href="/supdocuments/'+data+'"><img src="{% static 'images/Logo/corbeille.png' %}" width="20"/></a>';
+            }
+          }
+        ]
+      });
+    }
+  })();
+</script>
+
+{% endblock content %}

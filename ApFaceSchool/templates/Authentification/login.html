@@ -1,0 +1,61 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            {% endif%}
+
+ <div class="row">
+            <div class="col-lg-4">
+            </div>
+             <div class="col-lg-4 ml-5">
+                <div class="card w-15 m-3">
+                  <div class="card-body">
+                    <h5 class="card-title text-center"> <img src="{% static 'images/Logo/login.png' %}" class="img-fluid" alt="FaceSchool"/></h5>
+
+                    <p class="card-text bg-success">
+                       <form method="post">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                            <p class="alert alert-danger">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        <table>
+                        {% for field in form %}
+                          <tr>
+                            <td>{{ field.label_tag }}</td>
+                            <td>{{ field }}</td>
+                          </tr>
+                        {% endfor %}
+                         </table>
+                        <button type="submit">se connecter</button>
+                    </form>
+
+                    </p>
+
+                  </div>
+            </div>
+                  <small>
+                Pas encore inscrit.e?
+                <a href="{% url 'inscription' %}">
+                    S'inscrire
+                </a>
+            <br>
+                Mot de passe oublié ?
+                <a href="{% url 'password_reset' %}">
+                    Renouveler mon mot de passe
+                </a>
+    </small>
+            </div>
+             <div class="col-lg-4">
+
+            </div>
+        </div>
+
+</di>
+
+{% endblock content %}

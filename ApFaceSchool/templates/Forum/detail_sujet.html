@@ -1,0 +1,104 @@
+
+{% extends base_template %}
+{% block content %}
+{% load static %}
+<div class="container mt-4 mb-5">
+  <!-- En-tête du sujet -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+      <h2 class="card-title text-primary mb-2">{{ sujet.titre }}</h2>
+      <p class="text-muted">
+        <i class="bi bi-person-circle"></i>
+        <strong>{{ sujet.auteur.username }}</strong>
+        {% if sujet.auteur.is_superuser %}
+          <span class="badge bg-danger ms-1">Admin</span>
+        {% elif sujet.auteur.is_staff %}
+          <span class="badge bg-warning text-dark ms-1">Modérateur</span>
+        {% else %}
+          <span class="badge bg-secondary ms-1">Membre</span>
+        {% endif %}
+        <span class="mx-2">•</span>
+        <i class="bi bi-clock"></i> {{ sujet.date_creation|date:"d/m/Y H:i" }}
+      </p>
+      <hr>
+      <p class="text-secondary">{{ sujet.description|linebreaksbr }}</p>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-light">
+      <h5 class="mb-0 text-secondary"><i class="bi bi-chat-dots"></i> Discussions</h5>
+    </div>
+    <div class="card-body">
+      {% for message in mess %}
+        <div class="d-flex align-items-start mb-4 p-3 border rounded bg-white shadow-sm">
+          <!-- Avatar -->
+           {% if  Types == "Formateur" %}
+               <img src="{{ message.auteur.formateurs.Photo.url|default:'/static/images/default_avatar.png' }}"
+               alt="avatar"
+               class="rounded-circle me-3"
+               width="50" height="50">
+          {% endif %}
+           {% if  Types == "Apprenant" %}
+               <img src="{{  message.auteur.apprenants.Photo.url|default:'/static/images/default_avatar.png' }}"
+               alt="avatar"
+               class="rounded-circle me-3"
+               width="50" height="50">
+          {% endif %}
+          <!-- Contenu -->
+          <div class="w-100">
+            <div class="d-flex justify-content-between">
+              <div>
+                <strong>{{ message.auteur.username }}</strong>
+                {% if message.auteur.is_superuser %}
+                  <span class="badge bg-danger ms-1">Admin</span>
+                {% elif message.auteur.is_staff %}
+                  <span class="badge bg-warning text-dark ms-1">Modérateur</span>
+                {% else %}
+                  <span class="badge bg-secondary ms-1">Membre</span>
+                {% endif %}
+              </div>
+              <small class="text-muted">
+                <i class="bi bi-clock"></i> {{ message.date_post|date:"d/m/Y H:i" }}
+              </small>
+            </div>
+            <p class="mt-2 mb-1">{{ message.contenu|linebreaksbr }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted fst-italic">Aucun message pour l’instant. Soyez le premier à répondre !</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Formulaire de réponse -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-light">
+      <h5 class="mb-0 text-secondary"><i class="bi bi-reply-fill"></i> Poster une réponse</h5>
+    </div>
+    <div class="card-body">
+      {% if user.is_authenticated %}
+        <form method="post" class="mb-3">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-send"></i> Envoyer
+          </button>
+        </form>
+      {% else %}
+        <p class="text-danger">Vous devez être connecté pour répondre.</p>
+        <a href="{% url 'login' %}" class="btn btn-outline-primary">Se connecter</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Lien retour -->
+  <div class="text-end">
+    <a href="{% url 'forum' %}" class="btn btn-outline-secondary">
+      ← Retour au forum
+    </a>
+  </div>
+</div>
+
+{% endblock %}

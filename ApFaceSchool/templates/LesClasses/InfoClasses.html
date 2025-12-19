@@ -1,0 +1,132 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+<div class="container-fluid">
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 m-3">
+        <img width="8%" src="https://img.freepik.com/vecteurs-premium/icone-classe-etudiants-illustration-3d-collection-retour-ecole-icone-classe-creative-etudiants-3d-pour-modeles-conception-web-infographie-plus-encore_676904-3130.jpg"/><b style="color : red">Information sur  Les Classes</b>
+
+         <hr>
+         <!--button type="submit" class="btn btn-primary btn-md"> <a href="{% url 'CreerClasses' %}"><b class="text-white">Créer une Classe</b></a></button-->
+         <center> <button type="submit" class="btn btn-primary btn-md"> <b class="text-white">QU'EST CE QU'UNE CLASSE VIRTUELLE ?</b></a></button></center>
+         <hr>
+         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 m-2 bloc-style  shadow">
+             <div class="row">
+                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4 bloc-style m-1" style="background-color: #f0f8ff">
+                     <b>Une classe virtuelle :</b>
+                      <hr>
+                     est un environnement d'apprentissage en ligne synchrone (en temps réel) qui simule une salle de classe traditionnelle. Elle permet aux enseignants et aux apprenants d'interagir en direct, à distance, grâce à des plateformes numériques dotées de fonctionnalités comme la vidéoconférence, le tableau blanc interactif et les salles de sous-groupes.
+                           <br><br> <b style="color: dark">Caractéristiques principales :</b><br><br>
+
+                   <li><b> En temps réel :</b></li> Les participants se connectent au même moment pour une durée définie, ce qui distingue la classe virtuelle de l'e-learning asynchrone (cours préenregistrés).
+                    <li><b>Interactivité:</b></li>  Elle offre des outils pour permettre aux élèves et aux formateurs de collaborer et d'échanger en direct, que ce soit pour des questions collectives ou privées.
+                     <li><b>Flexibilité géographique :</b></li> Les apprenants peuvent participer depuis n'importe quel endroit disposant d'une connexion Internet, sans avoir à se déplacer.
+                    <li><b>Outils numériques :</b></li> Des plateformes dédiées fournissent des fonctionnalités pour recréer une expérience de classe,<b>tel Google Meet</b> y compris des moyens de présentation (vidéos, documents) et des outils de communication variés
+                     <hr>
+                     <div class="d-flex justify-content-between align-items-center ">
+                         {% if Types == "Formateur" %}
+                            <a href="{% url 'creer_reunions' %}" class="btn btn-secondary">Créer une Réunion Classe</a>
+                         {% endif %}
+                    </div>
+                 </div>
+                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4 bloc-style m-2" style="background-color: #f0f8ff">
+                         <b>Le formateur peut :</b>
+                      <hr>
+                   <p> <ul>
+                          <li>Créer de sa  Classes Traditionnelle créer sa classe Virtuelle dans ses disciplines enseignées</li>
+                          <li>Stocker ses documents pour un accès instantané et les transferer entre classes</li>
+                          <li>Déposer et partager des documents en toutes facilité</li>
+                          <li>Poster ses Solutions pour des Epreuves,Exercices</li>
+                          <li>Donner une Note</li>
+                          <li>Ecrire des messages à ses Classes </li>
+                    </ul></p>
+                        <div class="row">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <center>
+                                    <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6" >
+                                        <div class="card shadow   bloc-style-card" style="width: 18rem;">
+                                            <img src="{% static 'images/Page/conference.jpg' %}" class="zoom-hover zoom-hover:hover card-img-top " alt="FaceSchool"/>
+                                            <div class="card-body">
+                                                  <h5 class="card-title" style="color :green">Votre Classe Virtuelle</h5> <hr>
+                                                <p class="card-text">Un <b>Formateur</b> en plus de sa <b>Classe traditionnelle</b> a la possibilité de créer une <b>classe numerique</b> .</p>
+
+                                            </div>
+                                       </div>
+                                    </div>
+                                </center>
+                           </div>
+                        </div>
+                     <div class="d-flex justify-content-between align-items-center ">
+                        {% if Types == "Formateur" %}
+                            <a href="{% url 'CreerClasses' %}" class="btn btn-secondary">Créer Votre Classe</a>
+                         {% endif %}
+                    </div>
+                 </div>
+                 <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 bloc-style m-1" style="background-color: #f0f8ff">
+                         <b>Partenariat entre Classe:</b>
+                   <p>
+                        <hr>
+                     Les Classes peuvent signer des partenariats entre elles.<br>
+                     <strong>Les Avantages :</strong>
+                     <ul>
+                         <li>Plusieurs Classes en une seule avec le Partenariat</li>
+                         <li>Accès aux documents des partenaires </li>
+                         <li>Participer aux conferences des classes Partenaires</li>
+                          <li>Possibiité de suivre les cours en ligne</li>
+                          <li>Entrer en contact avec les autres apprenants</li>
+                     </ul>
+                   </p>
+
+                     <img class="img-fluid " width="100%" src="https://www.win-france.org/win/wp-content/uploads/2018/07/iratech-partenariat.jpg"  />
+
+                 </div>
+             </div>
+            <br>
+            <b style="color: red"><center> <img src="{% static 'images/Accueil/gauche.gif' %}"  alt="FaceSchool"/>  AVEC FACESCHOOL  <img src="{% static 'images/Accueil/droite.gif' %}"  alt="FaceSchool"/></center></b>
+         </div>
+    </div>
+    <hr>
+    <div class="row justify-content-center mb-5">
+         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 bloc-style m-1" style="background-color: #f0f8ff">
+                     <center><b class="titre-principal">Les  classes virtuelles à ce Jour :[ {{MesClasTotal}} ]</b></center>
+                      <hr>
+                    <table class="table table-striped table-bordered ">
+                  <thead class="table-success">
+                    <tr>
+                     <th width="20%">Date Création</th>
+                      <th width="10%">Code</th>
+                      <th width="30%">Classe</th>
+                        <th>Niveau</th>
+                      <th>Effectif</th>
+                      <th width="30%">Etablissement</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for clas in MesClas %}
+                        <tr>
+                          <td>{{clas.create_at }}</td>
+                          <td>{{clas.id}}</td>
+                          <td>{{clas.NomClasse}}</td>
+                           <td>{{clas.Niveau}}</td>
+                           <td>{{clas.Effectif }}</td>
+                            <td>{{clas.CodeEts}}</td>
+
+                        </tr>
+                     {% empty %}
+                          <tr>
+                           <td colspan="50"><center style="color: red"><b>Aucune Classe Virtuelle</b></center></td>
+                         </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+
+         </div>
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock content %}

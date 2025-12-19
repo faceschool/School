@@ -1,0 +1,121 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+/* --- Animation d’apparition fluide --- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Animation image (flottement doux + zoom lent) --- */
+.img-animated {
+  animation: floatZoom 6s ease-in-out infinite;
+}
+
+@keyframes floatZoom {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.05) translateY(-8px);
+  }
+}
+
+/* --- Effet doux sur les boutons --- */
+button:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+</style>
+
+<div class="container my-5">
+  <div class="row justify-content-center align-items-center fade-in">
+
+    <!-- Partie explicative -->
+    <div class="col-lg-6 col-md-6 mb-4 fade-in" style="animation-delay: 0.2s;">
+      <div class="card border-0 shadow-sm p-3">
+        <img class="img-fluid rounded mb-3 img-animated" src="{% static 'images/Page/classe2.png' %}" alt="Illustration classe" />
+        <p>
+          Chaque <b class="text-primary">Formateur</b> peut créer autant de <b class="text-primary">Classes</b> qu’il le souhaite.
+          <br><br>
+          Une <b class="text-primary">Classe</b> peut correspondre à un cours spécifique ou à un regroupement par <b class="text-primary">Niveau</b>.
+          <br><br>
+          Le <b class="text-primary">Code d’invitation</b> est choisi par le formateur pour permettre aux apprenants (étudiants, élèves, etc.) de rejoindre la classe.
+        </p>
+      </div>
+    </div>
+
+    <!-- Formulaire de création -->
+    <div class="col-lg-5 col-md-6 fade-in" style="animation-delay: 0.5s;">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-info text-white text-center py-3">
+          <h5 class="mb-0"><i class="fa fa-graduation-cap"></i> CRÉER UNE CLASSE</h5>
+        </div>
+        <div class="card-body">
+
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} shadow-sm text-center fade-in" style="animation-delay: 0.7s;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="post" action="{% url 'AjouterClasses' %}">
+            {% csrf_token %}
+
+            <div class="form-group mb-3">
+              <label><b>Nom de la Classe :</b></label>
+              <input type="text" name="NomClasse" class="form-control" placeholder="Ex: 3ème A, Terminale D, BTS Info 1...">
+            </div>
+
+            <div class="form-group mb-3">
+              <label><b>Niveau :</b></label>
+              <select class="form-control" name="niveau">
+                <option value="">-- Sélectionnez un Niveau --</option>
+                {% for niv in Lniveau %}
+                  <option value="{{niv.niveau}}">{{niv.niveau}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group mb-3">
+              <label><b>Chef de Classe :</b></label>
+              <input type="text" name="ChefClasse" class="form-control" placeholder="Nom du chef de classe">
+            </div>
+
+            <div class="form-group mb-3">
+              <label><b>Code Établissement :</b></label>
+              <input type="text" name="CodeEts" class="form-control" placeholder="Code de votre établissement">
+            </div>
+
+            <div class="form-group mb-3">
+              <label><b>Code d’Invitation :</b></label>
+              <input type="text" name="CodeAffect" class="form-control" placeholder="Ex: CLASSE2025">
+            </div>
+
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success px-5 shadow-sm">
+                <i class="fa fa-save"></i> Enregistrer
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,130 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid">
+
+    <hr>
+ <div class="m-3"><center><img  width="5%" src="https://www.egfbtp.com/wp-content/uploads/2021/06/partenariat.jpg" class="img-fluid"   alt="FaceSchool"/><b class="titre-principal">Mes Groupes de Travail Partenaires</b></center></div>
+  <hr>
+    <div class="row m-3">
+         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12  table-responsive shadow mb-1">
+            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <table class="table table-striped table-bordered">
+              <thead class="table-success">
+                <tr>
+                  <!--th>#</th-->
+                  <th width="25%">Groupe Partenaires</th>
+                  <th>Responsable</th>
+                  <th>Contact</th>
+                  <th width="15%">Documents Partenaires</th>
+                  <th width="15%">SUPPRIMER</th>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                    {% for Listes in ListePartenariats %}
+                        {% if  Listes.ProfsPartenaire_id == request.user.id %}
+                              <tr>
+                                  <!--td>{{ Listes.id }}</td-->
+                                  <td width="15%"> <b style="color: red" > {{ Listes.GroupeTravDemandeur.Groupe}}-{{ Listes.GroupeTravDemandeur.id}} </b><=>{{ Listes.GroupeTravPartenaire.Groupe}}-{{ Listes.GroupeTravPartenaire.id}}</td>
+                                  <td>{{Listes.GroupeTravDemandeur.Responsable}}</td>
+                                  <td>{{Listes.GroupeTravDemandeur.Contact}}</td>
+                                  <td width="15%">
+                                    <center>  <a  href="{% url 'ListeDocumentPartGrpTrav' Listes.GroupeTravDemandeur_id  %}"><img width="15%" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid" alt="FaceSchool"/></a></center>
+                                  </td>
+                                  <td width="15%">
+                                    <center> <a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="{% url 'SuppPartenariatGrpTrav' Listes.id %}"><img width="15%" src="{% static 'images/Logo/corbeille.png' %}" alt="FaceSchool"/></a></center>
+                                  </td>
+                              </tr>
+                        {% endif %}
+                        {% if   Listes.ProfsDemandeur_id  == request.user.id %}
+                            <tr>
+                                  <!--td>{{ Listes.id }}</td-->
+                                  <td><b style="color: red">{{ Listes.GroupeTravPartenaire.Groupe}}-{{ Listes.GroupeTravPartenaire.id}}</b> <=> {{Listes.GroupeTravDemandeur.Groupe}}-{{ Listes.GroupeTravDemandeur.id}}</td>
+                                  <td>{{Listes.GroupeTravPartenaire.Responsable}}</td>
+                                  <td>{{Listes.GroupeTravPartenaire.Contact}}</td>
+                                  <td width="15%">
+                                     <center> <a   href="{% url 'ListeDocumentPartGrpTrav' Listes.GroupeTravPartenaire_id  %}"><img width="25%" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid" alt="FaceSchool"/></a></center>
+                                  </td>
+                                  <td width="15%">
+                                   <center>   <a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="{% url 'SuppPartenariatGrpTrav' Listes.id %}"><img width="15%" src="{% static 'images/Logo/corbeille.png' %}" alt="FaceSchool"/></a></center>
+                                  </td>
+                              </tr>
+
+                        {% endif %}
+
+                   {% empty %}
+                       <tr><td colspan="30">Aucun partenariat trouvé.</td></tr>
+                 {% endfor %}
+              </tbody>
+            </table>
+              <b>Total :{{Total}}</b>
+         </div>
+
+        <!--Document par classe-->
+        {% if ListeDossiers  %}
+        <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5 m-2 table-responsive shadow">
+            <center> ====<b> <label for="id_Nom" class="form-label">Groupe Travail :</label></b>
+              [ {{ nomgroup}}-{{ pk }}]====</center>
+            <hr>
+            <div><center>Vous pouvez trier par Type de document en selectionnant le Types ci-dessous.</center></div>
+
+             <form method="POST" enctype="multipart/form-data" action="{% url 'ListeDocGRPTravPartenTypeDoc' pk  %}" class="p-4 shadow rounded bg-light">
+                 {% csrf_token %}
+              <center><b><label for="Type" class="form-label">Type document :</label></b>
+                <select class="form-select" name="Type" id="Type">
+                    {% for type in MesTypes %}
+                         <option value="{{type.TypeDoc}}">{{type.TypeDoc}}</option>
+                     {% endfor %}
+                 </select>
+
+                  <button type="submit" class="btn btn-primary">OK</button></center>
+              </form>
+            {% if type_doc  %}
+                <div><center> Trié par :<b>[{{type_doc}}]</b></center></div>
+            {% endif  %}
+               <table class="table table-striped table-bordered">
+                  <thead class="table-success">
+                    <tr>
+                      <!--th>#</th-->
+                      <th>Discipline</th>
+                        <!--th>Niveau</th-->
+                      <th>Titre</th>
+                      <th>Type</th>
+                         <th>documents</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for doc in ListeDossiers %}
+                        <tr>
+                          <!--th scope="row">{{doc.id}}</th-->
+                          <td>{{doc.Discipline}}</td>
+                            <!--td>{{doc.Niveau}}</td-->
+                             <td>{{doc.Titre}}</td>
+                          <td>{{doc.TypeDoc}}</td>
+                          <td>
+                            <a href="{{ doc.Document.url }}" download>Télécharger</a>
+                         </td>
+                        </tr>
+                         {% empty %}
+                       <tr><td colspan="3">Aucun document.</td></tr>
+                    {% endfor %}
+                  </tbody>
+               </table>
+                <b>Total :{{Total}}</b>
+        </div>
+
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock content %}

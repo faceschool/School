@@ -1,0 +1,46 @@
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Confirmation de votre compte</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        a.button {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 20px;
+            color: white;
+            background-color: #4169E1;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a.button:hover {
+            background-color: #3654b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Bonjour {{ user.username }},</h2>
+        <p>Merci de vous être inscrit sur notre site. Pour activer votre compte, cliquez sur le bouton ci-dessous :</p>
+        <a class="button" href="{{ activation_link }}">Confirmer mon compte</a>
+        <p>Si le bouton ne fonctionne pas, copiez-collez ce lien dans votre navigateur :</p>
+        <p><a href="{{ activation_link }}">{{ activation_link }}</a></p>
+        <hr>
+        <p>Si vous n'avez pas créé ce compte, ignorez simplement cet email.</p>
+    </div>
+</body>
+

@@ -1,0 +1,58 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+
+<h4 class="titre-principal m-3"><b>LISTE DES COURS À DOMICILE</b></h4>
+<div class="row">
+     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+<!--       <img width="100%" src="{% static 'images/Page/cours-soutien.jpg' %}"  alt="Cours à Domicile 1">-->
+     </div>
+
+     <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6" >
+         {% if messages %}
+            {% for message in messages %}
+              <center>  <div class="alert alert-success">{{ message }}</div></center>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+    <div class="col-md-12 m-3">
+
+          {% if ListeCoursDom %}
+                <br>
+                      <hr>
+             <b>Selection :</b><b style="color: red"> {{Disciple}}</b>
+            <div class="table-responsive mt-2">
+              <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-primary">
+                  <tr>
+                    <th>Code</th>
+                    <th>Logo</th>
+                    <th>Titre</th>
+                    <th>Discipline</th>
+                    <th>Description</th>
+                    <th>Actif</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for etab in ListeCoursDom %}
+                    <tr>
+                      <td>{{ etab.id }}</td>
+                      <td><img src="{{ etab.image.url }}" alt="Logo" style="width: 60px; height: auto;"></td>
+                      <td>{{ etab.titre }}</td>
+                      <td>{{ etab.Discipline_id }}</td>
+                      <td>{{ etab.description|truncatewords:15 }}</td>
+                      <td>{{ etab.actif }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+    </div>
+
+</div>
+
+
+{% endblock %}

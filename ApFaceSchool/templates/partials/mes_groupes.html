@@ -1,0 +1,143 @@
+<div class="bg-white rounded shadow-sm p-3 mb-4">
+  <div class="text-center mb-3">
+    <img src="{% static 'images/Page/grpeTravail.jpg' %}" width="80" class="mb-2">
+    <h4 class="text-primary fw-bold">Mes Groupes de Travail</h4>
+  </div>
+
+  {% if Mesgroupes %}
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="table-success text-center">
+          <tr>
+            <th>#</th>
+            <th>Logo</th>
+            <th>Groupe</th>
+            <th>Discipline</th>
+            <th>Responsable</th>
+            <th>Contact</th>
+            <th>Documents</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for group in Mesgroupes %}
+            <tr>
+              <td><a href="{% url 'AjouterFormGrpTrav' group.id %}">{{ group.id }}</a></td>
+              <td><img src="{{ group.logo.url }}" width="50"></td>
+              <td>{{ group.Groupe }}</td>
+              <td>{{ group.Discipline_id }}</td>
+              <td>{{ group.Responsable }}</td>
+              <td>{{ group.Contact }}</td>
+              <td class="text-center">
+                <a href="{% url 'ListeDocumentPartGrpTrav' group.id %}">
+                  <img src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg"
+                       alt="Docs" width="40">
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-center text-danger">Aucun groupe trouvé.</p>
+  {% endif %}
+</div>
+
+<hr>
+
+<!-- Groupes partenaires -->
+<div class="bg-white rounded shadow-sm p-3 mb-4">
+  <div class="text-center mb-3">
+    <img src="https://www.egfbtp.com/wp-content/uploads/2021/06/partenariat.jpg" width="80">
+    <h4 class="text-primary fw-bold">Mes Groupes Partenaires</h4>
+  </div>
+
+  {% for clas in MesGrpPart %}
+    <h6 class="fw-bold text-danger">[{{ clas.id }} - {{ clas.Groupe }}]</h6>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="table-success text-center">
+          <tr>
+            <th>Groupe Partenaire</th>
+            <th>Responsable</th>
+            <th>Contact</th>
+            <th>Documents</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for Listes in ListePartenariatsGrp %}
+            {% if Listes.GroupeTravPartenaire_id == clas.id or Listes.GroupeTravDemandeur_id == clas.id %}
+              <tr>
+                <td><b class="text-primary">
+                  {{ Listes.GroupeTravPartenaire.Groupe|default:Listes.GroupeTravDemandeur.Groupe }}
+                </b></td>
+                <td>{{ Listes.GroupeTravPartenaire.Responsable|default:Listes.GroupeTravDemandeur.Responsable }}</td>
+                <td>{{ Listes.GroupeTravPartenaire.Contact|default:Listes.GroupeTravDemandeur.Contact }}</td>
+                <td class="text-center">
+                  <a href="{% url 'ListeDocumentPartGrpTrav' Listes.GroupeTravPartenaire_id|default:Listes.GroupeTravDemandeur_id %}">
+                    <img src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg"
+                         width="40">
+                  </a>
+                </td>
+              </tr>
+            {% endif %}
+          {% empty %}
+            <tr><td colspan="4" class="text-center text-danger">Aucun partenariat trouvé.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% empty %}
+    <p class="text-center text-danger">Aucun groupe partenaire trouvé.</p>
+  {% endfor %}
+</div>
+
+<hr>
+
+<!-- Documents groupe travail -->
+<div class="bg-white rounded shadow-sm p-3 mb-4">
+  <div class="text-center mb-3">
+    <img src="https://media.istockphoto.com/id/136804993/fr/photo/isol%C3%A9-vue-de-contenir-un-fichier-de-dossiers-sur-fond-blanc.jpg?s=612x612&w=0&k=20&c=vELavkwpovpAbH1TiVIjVZbW6Lx9yzEhP1S-IUpOBSA=" width="80">
+    <h4 class="text-primary fw-bold">Mes Documents Groupe de Travail</h4>
+  </div>
+
+  {% for group in Mongroupe %}
+    <h6 class="fw-bold text-danger">[{{ group.id }} - {{ group.Groupe }}]</h6>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="table-success text-center">
+          <tr>
+            <th>Discipline</th>
+            <th>Niveau</th>
+            <th>Type</th>
+            <th>Titre</th>
+            <th>Document</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for doc in DocGrpTrav %}
+            {% if doc.groupetravail.id == group.id %}
+              <tr>
+                <td>{{ doc.Discipline }}</td>
+                <td>{{ doc.Niveau }}</td>
+                <td>{{ doc.TypeDoc }}</td>
+                <td>{{ doc.Titre }}</td>
+                <td>
+                  {% if doc.Document %}
+                    <a href="{{ doc.Document.url }}" download class="btn btn-sm btn-outline-primary">Télécharger</a>
+                  {% else %}
+                    Aucun document
+                  {% endif %}
+                </td>
+              </tr>
+            {% endif %}
+          {% empty %}
+            <tr><td colspan="5" class="text-center text-danger">Aucun document trouvé.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% empty %}
+    <p class="text-center text-danger">Aucun document trouvé.</p>
+  {% endfor %}
+</div>

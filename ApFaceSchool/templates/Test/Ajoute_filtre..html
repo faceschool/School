@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="get">
+    <select name="classe">
+        <option value="">-- Filtrer par classe --</option>
+        {% for c in classes %}
+            <option value="{{ c.id }}" {% if request.GET.classe == c.id|stringformat:"s" %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="user">
+        <option value="">-- Filtrer par utilisateur --</option>
+        {% for u in users %}
+            <option value="{{ u.id }}" {% if request.GET.user == u.id|stringformat:"s" %}selected{% endif %}>{{ u.username }}</option>
+    {% endfor %}
+    </select>
+
+    <button type="submit">Filtrer</button>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends base_template %}
+{% block content %}
+{% load static %}
+<div class="container-fluid py-3">
+     <div class="row mt-3">
+         <h4 class="titre-principal">Paiement de capacité souhaitée (Go)</h4>
+         <hr>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 m-1" ></div>
+
+        <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 m-1 table-responsive shadow">
+            <div class="row justify-content-center align-items-center fade-in">
+                <form id="quotaForm" method="post" action="{% url 'demande_quota' %}">
+                  {% csrf_token %}
+                  <div class="modal-body">
+                      <label class="form-label">Nouvelle capacité souhaitée (Go)</label>
+                      <input id="capacite" type="number" name="capacite" class="form-control" min="1" required>
+
+                      <div class="mt-3">
+                          <label class="form-label">Choisir (A = Demande / B = Paiement)</label>
+                          <select id="actionSelect" name="action" class="form-select">
+                             <option value="request">A — Demande (admin validera)</option>
+                             <option value="pay">B — Payer maintenant</option>
+                          </select>
+                      </div>
+
+                      <small class="text-muted d-block mt-2">
+                          Si vous choisissez "Payer", vous serez redirigé vers la page de paiement.
+                      </small>
+                  </div>
+
+                  <div class="modal-footer m-1">
+                    <button type="button" class="btn btn-secondary m-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+     </div>
+</div>
+{% endblock content %}

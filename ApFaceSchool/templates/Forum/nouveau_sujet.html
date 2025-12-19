@@ -1,0 +1,46 @@
+{% extends base_template %}
+{% block content %}
+{% load static %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">Nouveau Sujet</h2>
+    <a href="{% url 'forum' %}" class="btn btn-outline-secondary">
+      ← Retour
+    </a>
+  </div>
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post" class="p-4 shadow-lg rounded bg-light border border-1 border-primary-subtle">
+    {% csrf_token %}
+
+    {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label fw-bold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field}}
+        {% if field.help_text %}
+          <div class="form-text">{{ field.help_text }}</div>
+        {% endif %}
+        {% for error in field.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <div class="text-end">
+      <button type="submit" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Créer
+      </button>
+    </div>
+  </form>
+</div>
+
+
+{% endblock %}
+

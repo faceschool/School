@@ -1,0 +1,156 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary"><i class="bi bi-people-fill"></i> Créer une réunion de groupe</h2>
+    <a href="{% url 'liste_reunionsGrpTrav' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Retour
+    </a>
+  </div>
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form id="reunionForm" method="POST" enctype="multipart/form-data"
+        class="p-4 shadow-lg rounded bg-light border border-2 border-primary-subtle position-relative">
+    {% csrf_token %}
+
+    <!-- GROUPE -->
+    <div class="mb-3">
+      <label for="Groupeid" class="form-label fw-bold">Groupe de travail :</label>
+      <select class="form-select" name="Groupeid" id="Groupeid" required>
+        <option value="">--- Sélectionnez un groupe de travail ---</option>
+        {% for clas in groups %}
+          <option value="{{ clas.id }}">{{ clas.Groupe }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Titre -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Titre :</label>
+      <input type="text" name="Titre" class="form-control" placeholder="Votre titre..." required>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Description :</label>
+      <textarea class="form-control" name="Description" rows="4" placeholder="Votre description..." maxlength="500"></textarea>
+      <div class="form-text text-muted">Maximum 500 caractères</div>
+    </div>
+
+    <!-- Dates -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Date et heure de début :</label>
+        <input type="datetime-local" id="dateDebut" name="Datedebut" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Date et heure de fin :</label>
+        <input type="datetime-local" id="dateFin" name="Datefin" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Lien -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Lien Google Meet :</label>
+      <input type="url" class="form-control" name="lien" placeholder="Exemple : https://meet.google.com/xyz-abc-def" required>
+    </div>
+
+    <!-- Admin -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">ID Administrateur :</label>
+      <input type="text" class="form-control" value="{{ request.user.id }}" name="userid" readonly>
+    </div>
+
+    <!-- Erreur date -->
+    <div id="dateError" class="alert alert-danger mt-3 d-none"></div>
+
+    <!-- ✅ Bouton avec spinner -->
+    <div class="text-end mt-4">
+      <button type="submit" class="btn btn-primary px-4" id="submitBtn">
+        <span class="spinner-border spinner-border-sm d-none" id="spinner" role="status" aria-hidden="true"></span>
+        <i class="bi bi-check-circle" id="checkIcon"></i>
+        Créer la réunion
+      </button>
+    </div>
+
+    <!-- ✅ Popup de succès -->
+    <div id="successPopup"
+         class="alert alert-success position-absolute top-0 start-50 translate-middle-x mt-3 shadow fw-bold text-center d-none"
+         style="z-index: 10; width: 60%;">
+      ✅ Réunion créée avec succès !
+    </div>
+  </form>
+
+  <hr>
+
+  {% if reunion.meet_link %}
+    <p class="mt-3">
+      <strong>Lien Google Meet :</strong>
+      <a href="{{ reunion.meet_link }}" target="_blank" class="text-decoration-none text-success">
+        <i class="bi bi-camera-video"></i> Rejoindre
+      </a>
+    </p>
+  {% endif %}
+
+  <div class="mt-3">
+    <a href="{% url 'liste_reunionsGrpTrav' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-list-ul"></i> Voir la liste des réunions
+    </a>
+  </div>
+</div>
+
+<!-- ✅ Script JS -->
+<script>
+document.getElementById("reunionForm").addEventListener("submit", function(event) {
+  const dateDebut = new Date(document.getElementById("dateDebut").value);
+  const dateFin = new Date(document.getElementById("dateFin").value);
+  const dateError = document.getElementById("dateError");
+  const spinner = document.getElementById("spinner");
+  const submitBtn = document.getElementById("submitBtn");
+  const checkIcon = document.getElementById("checkIcon");
+  const successPopup = document.getElementById("successPopup");
+
+  // Réinitialisation
+  dateError.classList.add("d-none");
+  dateError.textContent = "";
+
+  // Validation
+  if (!dateDebut || !dateFin) return;
+
+  if (dateFin <= dateDebut) {
+    event.preventDefault();
+    dateError.textContent = "⚠️ La date de fin doit être postérieure à la date de début.";
+    dateError.classList.remove("d-none");
+    return;
+  }
+
+  // ✅ Spinner ON
+  spinner.classList.remove("d-none");
+  checkIcon.classList.add("d-none");
+  submitBtn.disabled = true;
+
+  // ✅ Popup de succès (simulation côté client avant redirection)
+  successPopup.classList.remove("d-none");
+  setTimeout(() => {
+    successPopup.classList.add("d-none");
+  }, 2500);
+
+  // ✅ Désactiver spinner après 3s (simulation)
+  setTimeout(() => {
+    spinner.classList.add("d-none");
+    checkIcon.classList.remove("d-none");
+    submitBtn.disabled = false;
+  }, 3000);
+});
+</script>
+
+
+{% endblock %}

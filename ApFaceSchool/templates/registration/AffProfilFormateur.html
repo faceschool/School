@@ -1,0 +1,142 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container my-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+
+            <!-- Card principale -->
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 style="color:white"><i class="bi bi-person-circle"></i> Votre Profil</h3>
+                </div>
+
+                <div class="card-body">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} shadow-sm" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data" class="row g-4 needs-validation" action="{% url 'update_ProfilFormateur' request.user.id %}" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Informations de compte -->
+                        {% if request.user.is_authenticated %}
+                            <div class="col-12">
+                                <div class="card border-info mb-3">
+
+                                    {% if forma.Photo %}
+                                    <p>Photo actuelle :</p>
+                                         <img src="{{ forma.Photo.url }}" alt="Photo"  class="img-fluid rounded-circle border mb-1" width="150">
+                                    {% endif %}
+                                    <hr>
+                                    <div class="card-header bg-info text-white">
+                                        <i class="bi bi-person-badge"></i> Informations du Compte
+                                    </div>
+                                    <div class="card-body row g-3">
+                                        <div class="col-md-4">
+                                            <label for="username_id" class="form-label">User ID(*)</label>
+                                           <input type="text" class="form-control" id="username_id" name="username_id" value="{{ request.user.id }} "   readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                           <label for="validationCustom01" class="form-label">Login(*)</label>
+                                            <input type="text" class="form-control" id="LoginAp" name="Login" value="{{user}}"   readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="email" class="form-label">E-mail(*)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" readonly >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Informations personnelles -->
+                        <div class="col-12">
+                            <div class="card border-success mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <i class="bi bi-card-text"></i> Informations Personnelles
+                                </div>
+                                <div class="card-body row g-3">
+                                    <div class="col-md-4">
+                                         <label for="MatriculeForm " class="form-label">Matricule(*)</label>
+                                        <input type="text" class="form-control " maxlength="15" id="MatriculeForm " name="MatriculeForm " value="{{forma.Matricule }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="nomAp" class="form-label">Nom(*)</label>
+                                        <input type="text" class="form-control" id="nomForm" name="nomForm" maxlength="15"  value="{{forma.Nom}}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="prenomForm" class="form-label">Prénom(*)</label>
+                                        <input type="text" class="form-control" id="prenomForm" name="prenomForm" maxlength="30"  value="{{forma.Prenom}}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="DateNaissance" class="form-label">Date Naissance(*)</label>
+                                        <input type="text" class="form-control datepicker " id="DateNaissance" name="DateNaissance" value="{{forma.DateNaissance}}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                         <label for="TelForm" class="form-label">Téléphone(*)</label>
+                                            <input type="tel" partten="[0-9]{10}" class="form-control" id="TelForm" name="TelForm"  value="{{forma.Tel}}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Pays" class="form-label">Pays(*)</label>
+                                        <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Pays}}"   readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations académiques -->
+                        <div class="col-12">
+                            <div class="card border-warning mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <i class="bi bi-book"></i> Informations Académiques
+                                </div>
+                                <div class="card-body row g-3">
+                                    <div class="col-md-4">
+                                        <label for="validationCustom10" class="form-label">Type(*)</label>
+                                            <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Type}}"   readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label  class="form-label">Sexe</label>
+                                             <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Sexe}}"   readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="validationCustom10" class="form-label">Discipline(*)</label>
+                                        <input type="text" class="form-control " id="Pays" name="Pays" value="{{forma.Discipline}}"   readonly>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bouton Soumettre -->
+                        <div class="text-center mt-4">
+                            <a href="{% url 'ProfilModifier' request.user.id %}" class="btn btn-warning text-white me-2">Modifier Profil</a>
+<!--                            <button type="submit" class="btn btn-success">Mettre à jour</button>-->
+                          </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+  $('.datepicker').datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    todayHighlight: true,
+    language: 'fr'
+  });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends base_template %}
+{% block content %}
+{% load static %}
+<div class="container-fluid py-3">
+  <div class="d-flex align-items-center mb-3">
+    <img src="https://cdn-icons-png.flaticon.com/512/3488/3488196.png" width="30" class="me-2" alt="Messages"/>
+    <h4 class="text-success fw-bold mb-0">Mes Messages</h4>
+  </div>
+  <hr>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-12 table-responsive shadow p-3 rounded bg-light">
+      <ul class="nav nav-tabs justify-content-center mb-3">
+        <li class="nav-item mx-2">
+          <a class="btn btn-warning text-white fw-bold" href="{% url 'Ajouter_MessagesClasse' request.user.id %}">Mes Messages Classes</a>
+        </li>
+        <li class="nav-item mx-2">
+          {% if Types == 'Formateur' %}
+            <a class="btn btn-warning text-white fw-bold" href="{% url 'Ajouter_MessagesGroupeTrav' request.user.id %}">Mes Messages Groupe Travail</a>
+          {% elif Types == 'Apprenant' %}
+            <a class="btn btn-warning text-white fw-bold" href="{% url 'Ajouter_MessagesGroupeEtude' request.user.id %}">Mes Messages Groupe d'étude</a>
+          {% endif %}
+        </li>
+      </ul>
+
+      <!-- Optionnel : afficher ici un tableau ou une liste des messages -->
+      <div class="tab-content mt-3">
+        <p class="text-muted text-center">Sélectionnez un onglet pour afficher vos messages.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

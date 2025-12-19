@@ -1,0 +1,152 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+/* Animation douce */
+.fade-in {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Image d’en-tête */
+.header-img {
+  width: 8%;
+  min-width: 80px;
+  animation: floatZoom 6s ease-in-out infinite;
+}
+
+@keyframes floatZoom {
+  0% { transform: scale(0.97); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(0.97); }
+}
+
+/* Table plus lisible */
+.table th {
+  text-align: center;
+  background-color: #198754 !important;
+  color: white;
+}
+
+.table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Avantages list stylé */
+ul li {
+  margin-bottom: 8px;
+}
+
+/* Encadrement et effets */
+.card-like {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+.card-like:hover {
+  transform: translateY(-5px);
+}
+</style>
+
+
+<div class="container-fluid fade-in">
+
+  <!-- En-tête -->
+  <div class="text-center text-danger mb-4">
+    <img src="https://www.egfbtp.com/wp-content/uploads/2021/06/partenariat.jpg"
+         class="img-fluid header-img" alt="FaceSchool">
+    <b class="titre-principal fs-4"> Mes Classes Partenaires </b>
+  </div>
+  <hr>
+
+  <div class="row justify-content-center mt-3">
+
+    <!-- Partie gauche : avantages -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card-like">
+        <h5 class="text-success text-center"><b>Les Avantages du Partenariat</b></h5>
+        <hr>
+        <ul>
+          <li>📘 Accès aux documents de cours des classes partenaires</li>
+          <li>📝 Accès aux devoirs et activités des partenaires</li>
+          <li>💻 Suivi des cours en ligne entre classes</li>
+          <li>🎥 Accès aux cours enregistrés des classes partenaires</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Partie droite : tableau -->
+    <div class="col-lg-7 col-md-10 mb-4">
+      {% for clas in MesClasPart %}
+        <div class="card-like mb-4 fade-in">
+          <h6 class="text-center text-primary mb-3">
+            <b>{{ clas.id }} - {{ clas.NomClasse }}</b>
+          </h6>
+
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Classe Partenaire</th>
+                <th>Établissement</th>
+                <th>Responsable</th>
+                <th>Documents</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for Listes in ListePartenariats %}
+                {% if Listes.ClassPartenaire_id == clas.id %}
+                  <tr>
+                    <td>{{ Listes.ClassDemandeur.id }}</td>
+                    <td style="color: blue">{{ Listes.ClassDemandeur.NomClasse }}-{{ Listes.ClassDemandeur.id }}</td>
+                    <td>{{ Listes.ClassDemandeur.CodeEts }}</td>
+                    <td>{{ Listes.ClassDemandeur.ChefClasse }}</td>
+                    <td>
+                      <a href="{% url 'ListeDocumentPartMaClasse' Listes.ClassDemandeur_id %}">
+                        <img width="40" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" alt="Docs" class="img-fluid rounded">
+                      </a>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if Listes.ClassDemandeur_id == clas.id %}
+                  <tr>
+                    <td>{{ Listes.ClassPartenaire.id }}</td>
+                    <td style="color: red">{{ Listes.ClassPartenaire.NomClasse }}-{{ Listes.ClassPartenaire.id }}</td>
+                    <td>{{ Listes.ClassPartenaire.CodeEts }}</td>
+                    <td>{{ Listes.ClassPartenaire.ChefClasse }}</td>
+                    <td>
+                      <a href="{% url 'ListeDocumentPartMaClasse' Listes.ClassPartenaire_id %}">
+                        <img width="40" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" alt="Docs" class="img-fluid rounded">
+                      </a>
+                    </td>
+                  </tr>
+                {% endif %}
+              {% empty %}
+                <tr><td colspan="5" class="text-center">Aucun partenariat trouvé.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% empty %}
+        <div class="text-center text-muted"><hr>Aucune classe partenaire trouvée.</div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock content %}

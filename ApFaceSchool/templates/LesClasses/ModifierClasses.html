@@ -1,0 +1,62 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+    <div class="row justify-content-center m-5">
+         <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 ">
+             <img class="img-fluid shadow" width="100%" src="{% static 'images/Page/classe2.png' %}"  />
+             <hr>
+             Chaque <b>Formateur</b> peut créer autant de <b>Classe</b> qu'il souhaite.
+             <br>Une <b>Classe</b> peut être chaque classe que le <b>Formateur</b> enseigne ou le regroupement par <b>Niveau</b> de toutes ses classes.
+             <br>Le <b>Code d'invitation</b> est un code defini par le <b>Formateur</b> lui même qui servira à inviter les Apprenants(Etudiants,<br>eleves,etc..) dans sa classe.
+         </div>
+
+        <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 shadow">
+            <div class="m-3"><center><button  class="btn btn-info "><b>MODIFIER UNE CLASSE</b></button></center></div>
+            <hr>
+             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} shadow">{{ message }}</div>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <hr>
+            <form method="post"  action="{% url 'UpdateClasses' Mclas.id %}" >
+
+                {% csrf_token %}
+                {% for field in Mclasse %}
+                <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4 ml-5">
+                    <b><label for="validationServer01" class="form-label">{{ field.label }}</label></b>
+                    <!--input type="text" class="form-control is-valid" id="validationServer01" value="{{ field }}" required-->
+                    {{ field }}
+                </div>
+
+                  <!--div class="form-group">
+                    <label for="formGroupExampleInput2"><b>Niveau :</b></label>
+                    <input type="text" name="Niveau" class="form-control" id="formGroupExampleInput2" value="{{field.Niveau}}">
+                  </div>
+                    <div class="form-group">
+                    <label for="formGroupExampleInput2"><b>Chef Classe :</b></label>
+                    <input type="text" name="ChefClasse" class="form-control" id="formGroupExampleInput2" value="{{field.ChefClasse}}">
+                  </div>
+                 <div class="form-group">
+                    <label for="formGroupExampleInput2"><b>Code Ets :</b></label>
+                    <input type="text" name="CodeEts" class="form-control" id="formGroupExampleInput2" value="{{field.CodeEts}}">
+                  </div>
+                <div class="form-group">
+                    <label for="formGroupExampleInput2"><b>Code Invitation :</b></label>
+                    <input type="text" name="CodeAffect" class="form-control" id="formGroupExampleInput2" value="{{field.CodeAffect}}">
+                  </div>
+                <hr-->
+                 {% endfor %}
+               <center> <button type="submit" class="btn btn-success btn-md">Enregistrer</button></center>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

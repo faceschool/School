@@ -1,0 +1,47 @@
+{% extends "Menus/Menu.html" %}
+{% block content %}
+{% load static %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif%}
+<div class="container">
+
+    <div class="row m-3 justify-content-center">
+        <u class="m-3"><h4>Delais d'exploitation d'essai expiré : 45 Jours</h4></u>
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+
+        </div>
+        <div class="col-md-7 col-xs-7 col-sm-7 col-lg-7">
+                <div class="card" style="width: 30rem;">
+<!--                  <img src="{% static 'images/logo/etudiant.png' %}" class="img-fluid shadow"  alt="FaceSchool"/>-->
+                  <div class="card-body ">
+                    <p class="card-text" style="color:red">
+                       Votre delai d'exploitation de 45 jours à expirer.<br>
+                        Vous devez maintenant activer votre compte pour <b>un(1) an soit 365 jours</b> renouvelable avant de continuer l'exploitation.
+                       <br> Vos données sont conservées jusqu'à l'activation de votre compte.
+                      <hr>
+                      <center style="color:blue">FRAIS D'ACTIVATION ET D'EXPLOITATION
+                      <br><hr>
+                      </center>
+                        <ul style="color:green">
+                            <li>Lycée et Collège : 1000 FCF/An</li>
+                            <li>Etudiants : 2000 FCF/An</li>
+                            <li>Professionnel/Travailleurs : 3000 FCF/An</li>
+                        </ul>
+                        Contact : 0707420242 / 0546001186 / 0150171734
+                    </p>
+                  </div>
+                    <a class="btn btn-success" href="{% url 'ActivationCompte' %}"  role="button">Activez mon compte</a>
+                </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock content %}

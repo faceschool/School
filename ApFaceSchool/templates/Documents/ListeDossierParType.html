@@ -1,0 +1,283 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+<div class="container-fluid py-3">
+  <!-- 🗂️ Titre principal -->
+  <h5 class="fw-bold text-danger mb-3">
+    <img width="45" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid me-2">
+    Mes Dossiers : [{{ TotalDossiers }}]
+  </h5>
+
+  <hr>
+
+  <div class="row g-3">
+    <!-- 🧾 Colonne gauche : types -->
+    <div class="col-lg-2 col-md-3 col-sm-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white text-center fw-bold">
+          <i class="bi bi-journal-text me-2"></i>Types de documents
+        </div>
+        <div class="card-body p-2">
+          <div class="d-flex flex-column gap-2">
+            {% for doc in TypeDocs %}
+            <a href="{% url 'ListeDossiersPartType' pk doc.TypeDoc %}"
+              class="text-decoration-none text-dark fw-semibold py-2 px-2 rounded hover-bg-light">
+              <i class="bi bi-bookmark-fill text-primary me-1"></i> {{ doc.TypeDoc }}
+            </a>
+            {% endfor %}
+          </div>
+
+          {% if type_doc %}
+          <form method="POST" enctype="multipart/form-data" action="{% url 'ListeDossiersPartType' pk type_doc %}"
+            class="mt-4 p-3 bg-light rounded shadow-sm">
+            {% csrf_token %}
+            <b><label for="Niveau" class="form-label">Filtrer par niveau :</label></b>
+            <select class="form-select" name="Niveau" id="Niveau">
+              {% for niv in niveau %}
+              <option value="{{ niv.niveau }}">{{ niv.niveau }}</option>
+              {% endfor %}
+            </select>
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary btn-sm">OK</button>
+            </div>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 📋 Colonne centre : liste -->
+    <div class="col-lg-6 col-md-6 col-sm-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center flex-wrap">
+          <span><i class="bi bi-folder2-open me-2"></i>Mes Documents</span>
+          <!-- 🔍 Recherche + Filtres -->
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <select id="filterType" class="form-select form-select-sm w-auto">
+              <option value="">Tous les types</option>
+              {% for t in TypeDocs %}
+              <option value="{{ t.TypeDoc }}">{{ t.TypeDoc }}</option>
+              {% endfor %}
+            </select>
+
+            <select id="filterNiveau" class="form-select form-select-sm w-auto">
+              <option value="">Tous les niveaux</option>
+              {% for n in niveau %}
+              <option value="{{ n.niveau }}">{{ n.niveau }}</option>
+              {% endfor %}
+            </select>
+
+            <input type="text" id="searchInput" class="form-control form-control-sm w-auto" placeholder="Rechercher...">
+
+            <button id="exportExcel" class="btn btn-light btn-sm border"><i class="bi bi-file-earmark-excel"></i></button>
+            <button id="exportPDF" class="btn btn-light btn-sm border"><i class="bi bi-file-earmark-pdf"></i></button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table id="docTable" class="table table-striped table-bordered align-middle mb-0">
+            <thead class="table-success text-center">
+              <tr>
+                <th>#</th>
+                <th>Discipline</th>
+                <th>Niveau</th>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Documents</th>
+                <th>Modifier</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for doc in ListeDossiers %}
+              <tr>
+                <td>{{ doc.id }}</td>
+                <td>{{ doc.Discipline_id }}</td>
+                <td>{{ doc.Niveau }}</td>
+                <td>{{ doc.Titre }}</td>
+                <td>{{ doc.TypeDoc }}</td>
+                <td>
+                  <a href="{{ doc.Document.url }}" download class="btn btn-outline-primary btn-sm">Télécharger</a>
+                  <a href="{% url 'Transfert_document' doc.id %}" class="btn btn-outline-secondary btn-sm">Transférer</a>
+                </td>
+                <td>
+                  <a href="{% url 'Modifier_Dossiers' doc.id %}" class="btn btn-outline-success btn-sm">Modifier</a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="7" class="text-center text-danger">Aucun document trouvé.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 🔢 Pagination -->
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <span id="paginationInfo" class="small text-muted"></span>
+          <div>
+            <button id="prevPage" class="btn btn-outline-secondary btn-sm me-1">Précédent</button>
+            <button id="nextPage" class="btn btn-outline-secondary btn-sm">Suivant</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📤 Colonne droite : ajout document -->
+    <div class="col-lg-3 col-md-3 col-sm-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white text-center fw-bold">
+          <i class="bi bi-upload me-2"></i>Déposer un document
+        </div>
+
+        <div class="card-body bg-light">
+          {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} shadow-sm">{{ message }}</div>
+          {% endfor %}
+          {% endif %}
+
+          <form method="POST" action="{% url 'Ajouter_dossiers' request.user.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-2">
+              <label class="form-label fw-bold">Discipline :</label>
+              <select class="form-select" name="Discipline">
+                {% for discip in disciple %}
+                <option value="{{ discip.discipline }}">{{ discip.discipline }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label fw-bold">Niveau :</label>
+              <select class="form-select" name="Niveau">
+                {% for niv in niveau %}
+                <option value="{{ niv.niveau }}">{{ niv.niveau }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label fw-bold">Type Document :</label>
+              <select class="form-select" name="TypeDoc">
+                {% for type in TypeDocs %}
+                <option value="{{ type.TypeDoc }}">{{ type.TypeDoc }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label fw-bold">Titre :</label>
+              <input type="text" name="Titre" class="form-control" placeholder="Titre du document" required>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label fw-bold">Observation :</label>
+              <textarea name="Observation" class="form-control" rows="3" maxlength="500"
+                placeholder="Votre observation..."></textarea>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label fw-bold">État :</label>
+              <select class="form-select" name="Etat">
+                <option value="PRIVE">Privé</option>
+                <option value="PUBLIC">Public</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Document :</label>
+              <input type="file" name="document" class="form-control" required>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCRIPT JS ==================== -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const rows = Array.from(document.querySelectorAll("#docTable tbody tr"));
+  const searchInput = document.getElementById("searchInput");
+  const filterType = document.getElementById("filterType");
+  const filterNiveau = document.getElementById("filterNiveau");
+  const perPage = 8;
+  let currentPage = 1;
+
+  function filterAndRender() {
+    const searchVal = searchInput.value.toLowerCase();
+    const typeVal = filterType.value.toLowerCase();
+    const nivVal = filterNiveau.value.toLowerCase();
+
+    const filtered = rows.filter(row => {
+      const text = row.textContent.toLowerCase();
+      const type = row.cells[4]?.textContent.toLowerCase() || "";
+      const niveau = row.cells[2]?.textContent.toLowerCase() || "";
+      return (
+        text.includes(searchVal) &&
+        (!typeVal || type.includes(typeVal)) &&
+        (!nivVal || niveau.includes(nivVal))
+      );
+    });
+
+    renderPage(filtered);
+  }
+
+  function renderPage(filteredRows) {
+    const tbody = document.querySelector("#docTable tbody");
+    tbody.innerHTML = "";
+
+    const start = (currentPage - 1) * perPage;
+    const end = start + perPage;
+    const pageRows = filteredRows.slice(start, end);
+
+    pageRows.forEach(r => tbody.appendChild(r));
+    document.getElementById("paginationInfo").textContent =
+      `Page ${currentPage} / ${Math.ceil(filteredRows.length / perPage)} (${filteredRows.length} documents)`;
+  }
+
+  document.getElementById("nextPage").addEventListener("click", () => {
+    currentPage++;
+    filterAndRender();
+  });
+
+  document.getElementById("prevPage").addEventListener("click", () => {
+    if (currentPage > 1) currentPage--;
+    filterAndRender();
+  });
+
+  [searchInput, filterType, filterNiveau].forEach(el => el.addEventListener("input", () => {
+    currentPage = 1;
+    filterAndRender();
+  }));
+
+  filterAndRender();
+
+  // 📊 Export Excel
+  document.getElementById("exportExcel").addEventListener("click", function () {
+    let table = document.getElementById("docTable").outerHTML;
+    let blob = new Blob([table], { type: "application/vnd.ms-excel" });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "mes_dossiers.xls";
+    link.click();
+  });
+
+  // 🧾 Export PDF (via impression navigateur)
+  document.getElementById("exportPDF").addEventListener("click", function () {
+    window.print();
+  });
+});
+</script>
+
+<!-- ====== Bootstrap Icons ====== -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+{% endblock content %}

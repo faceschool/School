@@ -1,0 +1,92 @@
+{% extends "Menus/MenuEspaceApp.html" %}
+{% block content %}
+{% load static %}
+<div class="container-fluid">
+    <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
+    <img width="8%" src="https://img.freepik.com/vecteurs-premium/icone-classe-etudiants-illustration-3d-collection-retour-ecole-icone-classe-creative-etudiants-3d-pour-modeles-conception-web-infographie-plus-encore_676904-3130.jpg"/><b style="color : red"> Mes Classes:[{{TotalClasse}}]</b>
+     <center>
+         <button type="submit" class="btn btn-primary btn-md"> <a href="{% url 'AjouterParCode' %}"><b class="text-white">Rejoindre une Classe</b></a></button>
+         <!--button type="submit" class="btn btn-info btn-md"> <a href="{% url 'ListepartClassesApp'%}"><b class="text-white">Liste des Classes Partenaires </b></a></button-->
+
+     </center>
+    </div>
+    <hr>
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10 mb-3 table-responsive">
+
+          {% if MesClas %}
+              <table class="table table-striped table-bordered ">
+                  <thead class="table-success">
+                    <tr>
+                      <th>Code</th>
+                      <th width="25%">Classe</th>
+                        <th>Niveau</th>
+                      <th>Detail</th>
+                      <th width="20%">Chef</th>
+                       <!--th width="10%">Code Invité</th-->
+                       <!--th width="10%">Modifier</th-->
+                        <!--th width="10%">Apprenants</th-->
+                        <th width="10%">Documents</th>
+                        <!--th width="10%">Supprimer</th-->
+                         <th width="15%">Partenariat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for clas in MesClas %}
+                        <tr>
+                          <td>{{clas.maclasse_id}}</td>
+                          <td>{{clas.maclasse.NomClasse}}</td>
+                          <td>{{clas.maclasse.Niveau}}</td>
+                          <td> <center> <a href="{% url 'ListeApprClasses' clas.maclasse_id %}"><img  width="22%" src="{% static 'images/Logo/oeil.png' %}"  alt="FaceSchool"/></a></center></td>
+                          <td>{{clas.maclasse.ChefClasse}}</td>
+                          <!--td>{{clas.CodeAffect}}</td-->
+                          <!--td>
+                             <center> <a href="{% url 'ListeApprClasses' clas.id %}"><img  width="22%" src="{% static 'images/Logo/modifier.png' %}"  alt="FaceSchool"/></a></center>
+                          </td-->
+                         <!--td>
+                             <center> <a  href="{% url 'AjouterApprClasses' clas.id %}"><img  width="22%" src="{% static 'images/Logo/plus.png' %}"  alt="FaceSchool"/></a></center>
+                         </td-->
+                            <td>
+                             <center> <a  href="{% url 'ListeDocClasses' clas.maclasse_id %}"><img  width="20%" src="https://static.vecteezy.com/ti/vecteur-libre/t1/8292836-dossier-avec-documents-emploi-entreprise-et-finance-embauche-dossier-de-documents-avec-feuilles-de-papier-et-notes-adhesives-illustration-de-dessin-anime-isoler-sur-fond-blanc-vectoriel.jpg" class="img-fluid"   alt="FaceSchool"/></a></center>
+                            </td>
+                            <!--td>
+                            <center> <a class="nav-link text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')" href="{% url 'SuppClasses' clas.id %}"><img width="35%" src="{% static 'images/Logo/corbeille.png' %}" alt="FaceSchool"/></a></center>
+                          </td-->
+                             <td>
+                             <center> <a  href="{% url 'ListepartMaClasse' clas.maclasse_id %}"><img  width="35%" src="https://www.egfbtp.com/wp-content/uploads/2021/06/partenariat.jpg"    alt="FaceSchool"/></a></center>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+
+         {% endif %}
+        </div>
+        <!-- Pagination -->
+                {% if MesClas.has_other_pages %}
+                    <nav class="mt-2">
+                        <ul class="pagination justify-content-center">
+                            {% if MesClas.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?page={{ MesClas.previous_page_number }}">Précédent</a></li>
+                            {% endif %}
+                            {% for num in MesClas.paginator.page_range %}
+                                <li class="page-item {% if MesClas.number == num %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if MesClas.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ MesClas.next_page_number }}">Suivant</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock content %}

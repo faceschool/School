@@ -1,0 +1,115 @@
+{% extends "Menus/MenuEspaceForm.html" %}
+{% block content %}
+{% load static %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary"><i class="bi bi-calendar-event"></i> Créer une réunion</h2>
+    <a href="{% url 'liste_reunions' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Retour
+    </a>
+  </div>
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form id="reunionForm" method="POST" enctype="multipart/form-data"
+        class="p-4 shadow-lg rounded bg-light border border-2 border-primary-subtle">
+    {% csrf_token %}
+
+    <!-- Classe -->
+    <div class="mb-3">
+      <label for="Maclasse" class="form-label fw-bold">Classe :</label>
+      <select class="form-select" name="maclas" id="Maclasse" required>
+        <option value="">--- Sélectionnez une Classe ---</option>
+        {% for clas in mesclasse %}
+          <option value="{{ clas.id }}">{{ clas.NomClasse }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Titre -->
+    <div class="mb-3">
+      <label for="Titre" class="form-label fw-bold">Titre :</label>
+      <input type="text" id="Titre" name="Titre" class="form-control"
+             placeholder="Votre Titre ..." required>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label for="Description" class="form-label fw-bold">Description :</label>
+      <textarea id="Description" class="form-control" name="Description"
+                rows="4" placeholder="Votre Description ..." maxlength="500"></textarea>
+      <div class="form-text text-muted">Maximum 500 caractères</div>
+    </div>
+
+    <!-- Dates -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Date et heure de début :</label>
+        <input type="datetime-local" id="dateDebut" name="Datedebut" class="form-control" required>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Date et heure de fin :</label>
+        <input type="datetime-local" id="dateFin" name="Datefin" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Lien -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Lien Google Meet :</label>
+      <input type="url" name="lien" class="form-control"
+             placeholder="Exemple : https://meet.google.com/xyz-abc-def" required>
+    </div>
+
+    <!-- Admin -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">ID Administrateur :</label>
+      <input type="text" class="form-control" value="{{ request.user.id }}" name="userid" readonly>
+    </div>
+
+    <div class="text-end">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle"></i> Créer la réunion
+      </button>
+    </div>
+  </form>
+
+  <hr>
+
+  {% if reunion.meet_link %}
+    <p class="mt-3">
+      <strong>Lien Google Meet :</strong>
+      <a href="{{ reunion.meet_link }}" target="_blank" class="text-decoration-none text-success">
+        <i class="bi bi-camera-video"></i> Rejoindre
+      </a>
+    </p>
+  {% endif %}
+
+  <div class="mt-3">
+    <a href="{% url 'liste_reunions' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-list-ul"></i> Voir la liste des réunions
+    </a>
+  </div>
+</div>
+
+<!-- ✅ Validation JavaScript -->
+<script>
+document.getElementById("reunionForm").addEventListener("submit", function(event) {
+  const dateDebut = new Date(document.getElementById("dateDebut").value);
+  const dateFin = new Date(document.getElementById("dateFin").value);
+
+  if (dateFin <= dateDebut) {
+    event.preventDefault();
+    alert("⚠️ La date de fin doit être postérieure à la date de début !");
+  }
+});
+</script>
+
+
+{% endblock %}
