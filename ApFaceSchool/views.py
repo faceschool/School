@@ -3,13 +3,7 @@ import uuid
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.serializers import json
 from django.http import JsonResponse, HttpResponseForbidden, JsonResponse
-from django.utils.functional import empty
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_str
-from PIL.ImageFont import truetype
-from django.utils import timezone
-from django.contrib.auth.models import User
-from datetime import timedelta
+
 from django.contrib.admin.views.decorators import staff_member_required
 import logging
 from django.template.loader import render_to_string
@@ -397,7 +391,7 @@ def confirmation_inscription(request, token):
 def home(request):
     # total_visiteurs = Visitor.visiteurs_uniques_expiration(24)  # visiteurs des dernières 24h
 
-    "Rechercher un utilisateur."
+    #"Rechercher un utilisateur."
     Appren = Apprenants.objects.filter(username_id=request.user.id).exists()
     Forma = Formateurs.objects.filter(username_id=request.user.id).exists()
     # if Forma:
@@ -609,12 +603,12 @@ def Profilformateurs(request):
         'disc': disc,
         #'nom_session': nom_session,
     }
-    return render(request, 'registration/Profilformateurs.html', context)
+    return render(request, 'registration/ProfilFormateurs.html', context)
 
 @login_required
 def AffProfilformateurs(request):
     Form = Formateurs.objects.filter(username_id=request.user.id).exists()
-    return render(request, 'registration/Profilformateurs.html', {'Form':Form})
+    return render(request, 'registration/ProfilFormateurs.html', {'Form':Form})
 
 @login_required
 def Profilapprenant(request):
@@ -627,7 +621,7 @@ def Profilapprenant(request):
         #'nom_session': nom_session,
 
     }
-    return render(request, 'registration/Profilapprenants.html', context)
+    return render(request, 'registration/ProfilApprenants.html', context)
 
 
 def password_reset(request):
@@ -806,7 +800,7 @@ def ProfilModifier(request, pk):  # Pour modifier les Profiles
                    'pk': pk,
                    }
 
-        return render(request, 'registration/Profilformateur.html', context)
+        return render(request, 'registration/ProfilFormateur.html', context)
 
 def update_ProfilApprenant(request, pk):
     # Vérifie si l’utilisateur est connecté
@@ -1135,7 +1129,7 @@ def infogroupeTravail(request):
         'Types': nom_session,
         'formTotal': formTotal,
     }
-    return render(request, 'infoGroupeTravail.html',context)
+    return render(request, 'InfoGroupeTravail.html',context)
 
 
 def infogroupetude(request):
@@ -1153,7 +1147,7 @@ def infogroupetude(request):
         'Types': nom_session,
         'formTotal': formTotal,
     }
-    return render(request, 'infoGroupeEtude.html',context)
+    return render(request, 'InfoGroupeEtude.html',context)
 
 
 def infoClasses(request):
@@ -1322,7 +1316,7 @@ def ListepartClasses(request):
         'MesClasPart': MesClasPart,
 
     }
-    return render(request,'Partenariat/ListepartClasse.html',context)
+    return render(request,'Partenariat/ListePartClasse.html',context)
 
 @login_required
 def ListepartClassesApp(request):
@@ -4837,7 +4831,7 @@ def nouveau_sujet(request):
         'Types': nom_session,
         'form': form
     }
-    return render(request, 'forum/nouveau_sujet.html', context)
+    return render(request, 'Forum/nouveau_sujet.html', context)
 
 @login_required
 def detail_sujet(request, pk):
@@ -4880,7 +4874,7 @@ def detail_sujet(request, pk):
             'sujet': sujet,
 
         }
-    return render(request, 'forum/detail_sujet.html', context)
+    return render(request, 'Forum/detail_sujet.html', context)
 
 
 def liste_sujets(request):

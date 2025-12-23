@@ -1,0 +1,488 @@
+body {
+  font-size: 14px; /* ajuste à ta convenance */
+  font-family: Arial, sans-serif;
+
+   body {
+      margin: 0;
+      padding-bottom: 60px; /* espace pour ne pas cacher le contenu */
+    }
+
+    .social-icons-fixed {
+      position: fixed;
+      bottom: 0;
+      right: 20px;
+      width: 100%;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: left;
+      gap: 20px;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+      z-index: 999;
+    }
+
+    .social-icons-fixed a {
+      font-size: 22px;
+      color: #333;
+      text-decoration: none;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .social-icons-fixed a:hover {
+      transform: scale(1.2);
+      color: #0077b5;
+    }
+
+}
+
+  .zoom-hover {
+    transition: transform 0.3s ease;
+
+  }
+
+/*Zoomer sur survol de la souris*/
+  .zoom-hover:hover {
+    transform: scale(1.5); /* Zoom de 20% */
+  }
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 20px; /* réduit les titres */
+  color:green;
+   text-align: center;
+
+}
+/*Zoomer le mot avec changement de couleur */
+ .hover-word {
+    transition: all 0.3s ease;
+    color: black;
+    font-weight: normal;
+  }
+
+  .hover-word:hover {
+    color: blue;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+p {
+  font-size: 100%;
+}
+
+
+.bloc-style {
+    background-color: #d0e7ff; /* Bleu ciel */
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+  }
+.bloc-style:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+.bloc-style-card {
+    background-color: #ADD8E6  ; /* Gris clair */
+    margin: 15px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+  }
+
+
+.thick-hr {
+    height: 5px;
+    background-color: black;
+    border: none;
+}
+.thicks-hr {
+    height: 15px;
+    background-color: green;
+    border: none;
+}
+
+.thickvertneon-hr {
+    height: 10px;
+    background-color: #4169E1    ;/*Vert néon*/
+    border: none;
+}
+
+.titre-principal {
+  font-size: 18px;
+  font-color: green
+  text-align: center;
+  color: #004080; /* Bleu foncé */
+  background-color: #e6f0ff; /* Bleu ciel pâle */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 1 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.titre-publicite {
+  font-size: 18px;
+  font-color: red
+  text-align: center;
+  color: red; /* Bleu foncé */
+  background-color: red; /* Bleu ciel pâle */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 1 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+table {
+    font-size: 100%;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 4px;
+    text-align: left;
+    font-size: 100%;
+}
+
+table thead {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+
+
+/* Ligne survolée */
+tr:hover {
+  background-color: #f9f9f9;
+}
+.btn-mini {
+  font-size: 10px;
+  padding: 2px 6px;
+  line-height: 1;
+
+}
+
+
+/*Rotation card */
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin: 10px auto;
+}
+
+.card-container {
+  perspective: 1000px;
+  width: 280px;
+  height: 280px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+}
+
+.card-container:hover .card {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: #f0f8ff;
+  border-radius: 10px;
+  padding: 15px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.card-front img {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.card-back {
+  background: #d1ecf1;
+  transform: rotateY(180deg);
+}
+
+.btn-card {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.btn-card:hover {
+  background-color: #0056b3;
+}
+@media screen and (max-width: 768px) {
+  .card-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-container {
+    width: 90%;
+    height: auto;
+  }
+
+.card {
+    height: 280px;
+  }
+
+  .card-front,
+  .card-back {
+    padding: 20px 15px;
+    font-size: 8px;
+  }
+
+.card-front img {
+    width: 100%;
+  }
+
+  .btn-card {
+    font-size: 8px;
+    padding: 6px 12px;
+  }
+}
+
+/*=======Publicité==========================*/
+
+.pub-cadre {
+  background-color: #1E90FF;
+  padding: 15px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  min-height: 250px;
+  text-align: center;
+}
+
+.pub img {
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.pub-title {
+  color: white;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.pub {
+  animation: fadein 1s ease-in-out;
+}
+
+.pub-container {
+    position: relative;
+    height: 250px; /* ou selon la taille de l'image */
+}
+
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1;
+
+
+/*------------Face-school------------------*/
+
+.faceschool-banner {
+    background-color: #f0f8ff;
+    padding: 30px 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+.faceschool-banner h1 {
+    font-size: 28px;
+    color: #000;
+    margin-bottom: 10px;
+  }
+
+.faceschool-banner h2 {
+    font-size: 22px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+.faceschool-banner .highlight {
+    color: #4169E1;
+    font-weight: bold;
+  }
+
+.faceschool-banner .alert {
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+@media (max-width: 768px) {
+    .faceschool-banner h1,
+    .faceschool-banner h2,
+    .faceschool-banner .alert {
+      font-size: 18px;
+    }
+  }
+
+.box-hover {
+  background-color: #f0f0f0; /* Couleur initiale */
+  padding: 20px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+}
+
+/* Survol */
+.box-hover:hover {
+  background-color: #a0c4ff; /* Couleur au survol (bleu clair ici) */
+}
+
+
+
+.faceschool-banner {
+    background-color: #f0f8ff;
+    padding: 30px 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+.faceschool-banner h1 {
+    font-size: 28px;
+    color: #000;
+    margin-bottom: 10px;
+  }
+
+.faceschool-banner h2 {
+    font-size: 22px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+.faceschool-banner .highlight {
+    color: #4169E1;
+    font-weight: bold;
+  }
+
+.faceschool-banner .alert {
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+@media (max-width: 768px) {
+    .faceschool-banner h1,
+    .faceschool-banner h2,
+    .faceschool-banner .alert {
+      font-size: 18px;
+    }
+  }
+
+.box-hover {
+  background-color: #f0f0f0; /* Couleur initiale */
+  padding: 20px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+}
+
+/* Survol */
+.box-hover:hover {
+  background-color: #a0c4ff; /* Couleur au survol (bleu clair ici) */
+}
+
+/*   FaceScholl Espace Collaboratif */
+.faceschool-intro {
+    background-color: #f9f9ff;
+    padding: 25px;
+    border-radius: 10px;
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+
+.faceschool-intro strong {
+    color: #2c3e50;
+  }
+
+.faceschool-intro b {
+    color: #4169E1;
+  }
+
+@media (max-width: 768px) {
+    .faceschool-intro {
+      font-size: 15px;
+      padding: 15px;
+    }
+  }
+
+/* --- BOUTONS --- */
+.btn-vert {
+      background-color: #00b050;
+      color: white;
+      border: none;
+      font-weight: 600;
+      border-radius: 30px;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+    }
+.btn-vert:hover {
+      background-color: #009442;
+      transform: scale(1.05);
+    }
+
+.btn-outline-bleu {
+      border: 2px solid #0d6efd;
+      color: #0d6efd;
+      border-radius: 30px;
+      font-weight: 600;
+      padding: 10px 20px;
+      transition: 0.3s;
+    }
+.btn-outline-bleu:hover {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+ /* --- FOOTER --- */
+footer {
+      background-color: #191970 ;
+      color: white;
+      text-align: center;
+      padding: 30px;
+      border-radius: 15px 15px 0 0;
+      margin-top: 60px;
+    }
+
+hr {
+      border-top: 3px solid #00b050;
+      width: 60%;
+      margin: 25px auto;
+    }
+
+    /* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+      h1 { font-size: 1.6rem; }
+      .titre-principal { font-size: 1rem; }
+    }

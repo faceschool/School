@@ -47,9 +47,10 @@ urlpatterns = [
 #Info
         path('infoApprenant', infoApprenant, name='infoApprenant'),
         path('infoFormateur', infoFormateur, name='infoFormateur'),
-        path('infogroupetude', infogroupetude, name='infogroupetude'),
-        path('infogroupeTravail',infogroupeTravail, name='infogroupeTravail'),
-# Classe
+        path('infogroupetude/', infogroupetude, name='infogroupetude'),
+        path('infogroupeTravail/', infogroupeTravail, name='infogroupeTravail'),
+
+                      # Classe
         path('MesClasses', MesClasses, name='MesClasses'),
         path('LesClasses', LesClasses, name='LesClasses'),
         path('AjouterClasses', AjouterClasses, name='AjouterClasses'),

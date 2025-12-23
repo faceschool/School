@@ -34,7 +34,7 @@ DEBUG = True
 
 AUTH_USER_MODEL = 'ApFaceSchool.CustomUser'
 
-ALLOWED_HOSTS = ['testserver','127.0.0.1']
+ALLOWED_HOSTS = []
 
 # Application definition
 
